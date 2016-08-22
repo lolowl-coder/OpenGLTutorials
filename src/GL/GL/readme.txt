@@ -1,1 +1,1 @@
-OpenGL headers
+OpenGL extension headers
