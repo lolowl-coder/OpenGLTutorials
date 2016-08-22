@@ -1,2 +1,2 @@
 # OpenGLTutorials
-OpenGL tutorials
+OpenGL tutorials in C++
