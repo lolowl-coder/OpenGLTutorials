@@ -38,3 +38,5 @@
 *.idb
 *.user
 *.ncb
+*BuildLog.htm
+*Lib/glew*
