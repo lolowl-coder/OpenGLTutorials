@@ -380,6 +380,14 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="Glow"
+					>
+					<File
+						RelativePath="..\..\..\src\Tests\Glow\GlowTest.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -507,6 +515,14 @@
 					>
 					<File
 						RelativePath="..\..\..\src\Tests\ParticleSystem\ParticleSystemTest.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Glow"
+					>
+					<File
+						RelativePath="..\..\..\src\Tests\Glow\GlowTest.h"
 						>
 					</File>
 				</Filter>

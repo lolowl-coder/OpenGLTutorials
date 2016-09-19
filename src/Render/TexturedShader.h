@@ -10,6 +10,6 @@ public:
    void setTextureUnit(int unit);
 
 private:
-   GLint mTextureLocation;
+   GLint mTextureUnitLocation;
 
 };

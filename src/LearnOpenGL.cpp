@@ -13,6 +13,7 @@
 #include "Tests/Camera/CameraTest.h"
 #include "Tests/ComputeShader/ComputeShaderTest.h"
 #include "Tests/ComputeShader/ImageProcessingTest.h"
+#include "Tests/Glow/GlowTest.h"
 #include "Tests/Instancing/InstancingTest.h"
 #include "Tests/ParticleSystem/ParticleSystemTest.h"
 
@@ -23,6 +24,7 @@ HWND windowHandle;
 
 enum TestType
 {
+   TT_GLOW,
    TT_INSTANCING,
    TT_COMPUTE_SHADER,
    TT_BLEND_EQUATION,
@@ -33,7 +35,7 @@ enum TestType
 };
 
 Test* currentTest = NULL;
-TestType currentTestType = TT_CAMERA;
+TestType currentTestType = TT_GLOW;
 bool lButtonPressed = false;
 
 TestType tests[TT_COUNT];
@@ -51,6 +53,11 @@ void changeTest(TestType& testType)
 
    switch (testType)
    {
+   case TT_GLOW:
+      {
+         currentTest = new GlowTest(director, "Glow");
+      }
+      break;
    case TT_INSTANCING:
       {
          currentTest = new InstancingTest(director, "Instancing");

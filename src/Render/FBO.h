@@ -11,6 +11,7 @@ public:
    bool init(const Vector2i& size);
    void deinit();
    void bind();
+   void bindTexture();
    void unbind();
    void clear();
 

@@ -1,14 +1,14 @@
 #include "Render/TexturedShader.h"
 
 TexturedShader::TexturedShader()
-: mTextureLocation(-1)
+: mTextureUnitLocation(-1)
 {
 }
 
 void TexturedShader::setTextureUnit(int unit)
 {
-   if(mTextureLocation == -1)
-      mTextureLocation = uniformLocation("u_texture");
+   if(mTextureUnitLocation == -1)
+      mTextureUnitLocation = uniformLocation("u_texture");
 
-   uniform1i(mTextureLocation, 1, &unit);
+   uniform1i(mTextureUnitLocation, 1, &unit);
 }
