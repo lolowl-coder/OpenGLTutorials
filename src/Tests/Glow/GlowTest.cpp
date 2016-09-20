@@ -141,27 +141,21 @@ void GlowTest::renderCheckerBackground()
 
 void GlowTest::run()
 {
-   mMainObjectFBO.unbind();
+   FBO::unbind();
    renderCheckerBackground();
 
-   //glDisable(GL_BLEND);
-   glEnable(GL_BLEND);
+   glDisable(GL_BLEND);
 
    mMainObjectFBO.bind();
    glClearColor(0.0, 0.0, 0.0, 0.0);
    glClear(GL_COLOR_BUFFER_BIT);
-   glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_SRC_ALPHA);
    render();
-   mMainObjectFBO.unbind();
-
-   //glEnable(GL_BLEND);
-
-   //glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ZERO);
+   //FBO::unbind();
 
    //blur
 
    Vector2i viewSize = mDirector.getViewSize();
-   const int blurRadius = 15;
+   const int blurRadius = 55;
 
    mBlurShader.bind();
 
@@ -169,24 +163,27 @@ void GlowTest::run()
    mHBlurFBO.bind();
    glClearColor(0.0, 0.0, 0.0, 0.0);
    glClear(GL_COLOR_BUFFER_BIT);
-   Vector2f step(1.0f / viewSize.x * 2.0, 0.0f);
+   Vector2f step(1.0f / viewSize.x * 1.0, 0.0f);
    mBlurShader.setUniforms(0, step, blurRadius);
    mMainObjectFBO.bindTexture();
    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-   mHBlurFBO.unbind();
 
    //v-blur
    mVBlurFBO.bind();
    glClearColor(0.0, 0.0, 0.0, 0.0);
    glClear(GL_COLOR_BUFFER_BIT);
    step.x = 0.0f;
-   step.y = 1.0f / viewSize.y;
+   step.y = 1.0f / viewSize.y * 1.0f;
    mBlurShader.setUniforms(0, step, blurRadius);
    mHBlurFBO.bindTexture();
    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-   mVBlurFBO.unbind();
+   
+   FBO::unbind();
 
    //draw on-screen
+   glEnable(GL_BLEND);
+   //glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_SRC_ALPHA, GL_ONE);
+   glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    mCheckerShader.bind();
    mCheckerShader.setUniforms(0, Vector3f(-0.5f, -0.5f, 0.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), Vector3f(2.0f, 2.0f, 1.0f), Vector2f(1.0f, 1.0f));
    mVBlurFBO.bindTexture();

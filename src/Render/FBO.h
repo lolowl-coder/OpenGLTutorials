@@ -12,7 +12,7 @@ public:
    void deinit();
    void bind();
    void bindTexture();
-   void unbind();
+   static void unbind();
    void clear();
 
 private:
