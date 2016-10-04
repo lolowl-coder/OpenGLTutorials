@@ -22,15 +22,15 @@ public:
    void setProjectionType(EProjectionType projectionType);
    Vector3f getVelocity() const;
    void setVelocity(const Vector3f velocity);
-   Vector3f getPosition();
+   Vector3f getPosition() const;
    void setPosition(const Vector3f& position);
-   Vector3f getLookAt();
+   Vector3f getLookAt() const;
    void setLookAt(const Vector3f& lookAt);
    void setRotationDelta(const Quatf& rotationDelta);
    void setYawPitch(float yaw, float pitch);
    void setFOV(const float fov);
-   Matrix4f getV();
-   Matrix4f getP();
+   Matrix4f getV() const;
+   Matrix4f getP() const;
 
 private:
    const Director& mDirector;

@@ -103,7 +103,7 @@ void Camera::setVelocity(const Vector3f velocity)
    mVelocity = velocity;
 }
 
-Vector3f Camera::getPosition()
+Vector3f Camera::getPosition() const
 {
    return mPosition;
 }
@@ -113,7 +113,7 @@ void Camera::setPosition(const Vector3f& position)
    mPosition = position;
 }
 
-Vector3f Camera::getLookAt()
+Vector3f Camera::getLookAt() const
 {
    return mLookAt;
 }
@@ -148,12 +148,12 @@ void Camera::setFOV(const float fov)
    mFOV = fov;
 }
 
-Matrix4f Camera::getV()
+Matrix4f Camera::getV() const
 {
    return mV;
 }
 
-Matrix4f Camera::getP()
+Matrix4f Camera::getP() const
 {
    return mP;
 }

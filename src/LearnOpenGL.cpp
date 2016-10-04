@@ -35,7 +35,7 @@ enum TestType
 };
 
 Test* currentTest = NULL;
-TestType currentTestType = TT_GLOW;
+TestType currentTestType = TT_CAMERA;
 bool lButtonPressed = false;
 
 TestType tests[TT_COUNT];

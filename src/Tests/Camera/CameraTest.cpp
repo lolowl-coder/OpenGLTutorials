@@ -56,7 +56,7 @@ void CameraTest::init()
 
    initWorldAxes();
 
-   const Vector2i dimensions(10, 10);
+   const Vector2i dimensions(300, 300);
    const Vector2f size(10.0f, 10.0f);
    mGrid.init(dimensions, size);
 
@@ -139,10 +139,7 @@ void CameraTest::run()
 
    renderWorldAxes();
 
-   Matrix4f v = mCamera.getV();
-   Matrix4f p = mCamera.getP();
-   Vector3f eye = mCamera.getPosition();
-   mGrid.render(p * v, eye);
+   mGrid.render(mCamera);
 }
 
 void CameraTest::onTouchEvent(TouchEventType eventType, const Vector2f& position)
