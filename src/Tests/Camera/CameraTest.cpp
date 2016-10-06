@@ -22,6 +22,7 @@ void AxesShader::setMVP(const Matrix4f& mvp)
 CameraTest::CameraTest(const Director& director, const std::string& name)
 : Test(director, name)
 , mCamera(director)
+, mTime(0.0f)
 {
 
 }
@@ -135,6 +136,10 @@ void CameraTest::renderWorldAxes()
 
 void CameraTest::run()
 {
+   mTime += mDirector.getTimeDelta() * 10.0f;
+   Matrix4f transform = Matrix4f::createRotationAroundAxis(0.0f, mTime, 0.0f);
+   mGrid.setTransform(transform);
+
    updateCamera();
 
    renderWorldAxes();

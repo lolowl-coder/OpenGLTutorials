@@ -44,4 +44,6 @@ private:
    Camera mCamera;
    Vector2f mLastTouchPosition;
    bool mKeyState[CHARS_COUNT];
+
+   float mTime;
 };

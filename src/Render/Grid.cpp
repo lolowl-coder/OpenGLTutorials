@@ -5,11 +5,10 @@
 
 GridShader::GridShader()
 : mMVPLocation(-1)
-, mMVLocation(-1)
+, mMLocation(-1)
 , mDiffuseLocation(-1)
 , mEyeLocation(-1)
 {
-
 }
 
 void GridShader::setMVP(const Matrix4f& mvp)
@@ -20,12 +19,12 @@ void GridShader::setMVP(const Matrix4f& mvp)
    uniformMatrix4(mMVPLocation, 1, &mvp);
 }
 
-void GridShader::setMV(const Matrix4f& mv)
+void GridShader::setM(const Matrix4f& m)
 {
-   if(mMVLocation == -1)
-      mMVLocation = uniformLocation("uMV");
+   if(mMLocation == -1)
+      mMLocation = uniformLocation("uM");
 
-   uniformMatrix4(mMVLocation, 1, &mv);
+   uniformMatrix4(mMLocation, 1, &m);
 }
 
 void GridShader::setDiffuse(const Vector4f& color)
@@ -76,7 +75,6 @@ struct Vertex
 Grid::Grid()
 : mNormals(GL_ARRAY_BUFFER, 0, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), 0)
 {
-
 }
 
 bool Grid::genNormalHelper(const Vector3f& v, const Vector2i& rowCol, const Vector2i& normal0Offset, const Vector2i& normal1Offset, Vector3f& accumulatedNormal)
@@ -361,10 +359,10 @@ void Grid::deinit()
 void Grid::bindShader(const Camera& camera)
 {
    mShader.bind();
-   Matrix4f mv = camera.getV();
-   Matrix4f mvp = camera.getP() * mv;
+   Matrix4f v = camera.getV();
+   Matrix4f mvp = camera.getP() * v * mTransform;
    mShader.setMVP(mvp);
-   mShader.setMV(mv);
+   mShader.setM(mTransform);
    mShader.setDiffuse(Vector4f(0.0f, 0.1f, 1.0f, 1.0f));
    mShader.setEye(camera.getPosition());
 }
@@ -417,11 +415,16 @@ void Grid::render(const Camera& camera)
 #if 0
    mNormalShader.bind();
    mNormalShader.setColor(Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
-   mNormalShader.setMVP(camera.getP() * camera.getV());
+   mNormalShader.setMVP(camera.getP() * camera.getV() * mTransform);
    mNormals.enable();
    glLineWidth(1);
    glDrawArrays(GL_LINES, 0, mDimensions.x * mDimensions.y * 2);
    checkGLError("Draw arrays");
    mNormals.disable();
 #endif
+}
+
+void Grid::setTransform(const Matrix4f& transform)
+{
+   mTransform = transform;
 }

@@ -10,13 +10,13 @@ public:
    GridShader();
 
    void setMVP(const Matrix4f& mvp);
-   void setMV(const Matrix4f& mv);
+   void setM(const Matrix4f& m);
    void setDiffuse(const Vector4f& color);
    void setEye(const Vector3f& eye);
 
 private:
    GLint mMVPLocation;
-   GLint mMVLocation;
+   GLint mMLocation;
    GLint mDiffuseLocation;
    GLint mEyeLocation;
 };
@@ -42,6 +42,7 @@ public:
    void init(const Vector2i& dimensions, const Vector2f& size);
    void deinit();
    void render(const Camera& camera);
+   void setTransform(const Matrix4f& transform);
 
 private:
    bool genNormalHelper(const Vector3f& v, const Vector2i& rowCol, const Vector2i& normal0Offset, const Vector2i& normal1Offset, Vector3f& accumulatedNormal);
@@ -50,6 +51,7 @@ private:
    void bindShader(const Camera& camera);
 
 private:
+   Matrix4f mTransform;
    Vector2i mDimensions;
    GLuint mGridVBO;
    GLuint mGridIBO;
