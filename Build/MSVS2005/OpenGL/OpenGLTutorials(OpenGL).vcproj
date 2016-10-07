@@ -305,6 +305,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\Render\Light.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Render\Material.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\Render\ParticleSystem.cpp"
 					>
 				</File>
@@ -436,6 +444,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\src\Render\Grid.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Render\Light.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Render\Material.h"
 					>
 				</File>
 				<File

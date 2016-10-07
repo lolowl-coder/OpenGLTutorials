@@ -2,6 +2,8 @@
 
 #include "Render/Camera.h"
 #include "Render/Buffer.h"
+#include "Render/Light.h"
+#include "Render/Material.h"
 #include "Render/Shader.h"
 
 class GridShader : public Shader
@@ -11,14 +13,23 @@ public:
 
    void setMVP(const Matrix4f& mvp);
    void setM(const Matrix4f& m);
-   void setDiffuse(const Vector4f& color);
+   void setObjectMaterial(const Material& material);
+   void setLight(const Light& light);
    void setEye(const Vector3f& eye);
 
 private:
    GLint mMVPLocation;
    GLint mMLocation;
-   GLint mDiffuseLocation;
    GLint mEyeLocation;
+   GLint mMaterialAmbientLocation;
+   GLint mMaterialDiffuseLocation;
+   GLint mMaterialSpecularLocation;
+   GLint mMaterialShininessLocation;
+   GLint mLightAmbientLocation;
+   GLint mLightDiffuseLocation;
+   GLint mLightSpecularLocation;
+   GLint mLightAttenuationLocation;
+   GLint mLightPositionLocation;
 };
 
 class NormalShader : public Shader
@@ -43,6 +54,8 @@ public:
    void deinit();
    void render(const Camera& camera);
    void setTransform(const Matrix4f& transform);
+   void setMaterial(const Material& material);
+   void setLight(const Light& light);
 
 private:
    bool genNormalHelper(const Vector3f& v, const Vector2i& rowCol, const Vector2i& normal0Offset, const Vector2i& normal1Offset, Vector3f& accumulatedNormal);
@@ -51,6 +64,8 @@ private:
    void bindShader(const Camera& camera);
 
 private:
+   Material mMaterial;
+   Light mLight;
    Matrix4f mTransform;
    Vector2i mDimensions;
    GLuint mGridVBO;

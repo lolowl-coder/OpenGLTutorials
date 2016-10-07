@@ -60,6 +60,10 @@ void CameraTest::init()
    const Vector2i dimensions(300, 300);
    const Vector2f size(10.0f, 10.0f);
    mGrid.init(dimensions, size);
+   Material material(Vector4f(0.0f, 0.0f, 0.0f, 1.0f), Vector4f(0.0f, 0.0f, 1.0f, 1.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 4.0f);
+   mGrid.setMaterial(material);
+   Light light(Vector3f(3.0f, 3.0f, 3.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 8.0f);
+   mGrid.setLight(light);
 
    mAxesShader.load("Data/Shader/Camera/axes.vs", "Data/Shader/Common/colored.fs");
 
@@ -136,9 +140,9 @@ void CameraTest::renderWorldAxes()
 
 void CameraTest::run()
 {
-   mTime += mDirector.getTimeDelta() * 10.0f;
-   Matrix4f transform = Matrix4f::createRotationAroundAxis(0.0f, mTime, 0.0f);
-   mGrid.setTransform(transform);
+   //mTime += mDirector.getTimeDelta() * 10.0f;
+   //Matrix4f transform = Matrix4f::createRotationAroundAxis(0.0f, mTime, 0.0f);
+   //mGrid.setTransform(transform);
 
    updateCamera();
 

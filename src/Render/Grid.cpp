@@ -6,8 +6,16 @@
 GridShader::GridShader()
 : mMVPLocation(-1)
 , mMLocation(-1)
-, mDiffuseLocation(-1)
 , mEyeLocation(-1)
+, mMaterialAmbientLocation(-1)
+, mMaterialDiffuseLocation(-1)
+, mMaterialSpecularLocation(-1)
+, mMaterialShininessLocation(-1)
+, mLightAmbientLocation(-1)
+, mLightDiffuseLocation(-1)
+, mLightSpecularLocation(-1)
+, mLightAttenuationLocation(-1)
+, mLightPositionLocation(-1)
 {
 }
 
@@ -27,12 +35,39 @@ void GridShader::setM(const Matrix4f& m)
    uniformMatrix4(mMLocation, 1, &m);
 }
 
-void GridShader::setDiffuse(const Vector4f& color)
+void GridShader::setObjectMaterial(const Material& material)
 {
-   if(mDiffuseLocation == -1)
-      mDiffuseLocation = uniformLocation("uDiffuse");
+   if(mMaterialAmbientLocation == -1)
+      mMaterialAmbientLocation = uniformLocation("objectMaterial.ambient");
+   uniform4(mMaterialDiffuseLocation, 1, &material.mAmbient);
+   if(mMaterialDiffuseLocation == -1)
+      mMaterialDiffuseLocation = uniformLocation("objectMaterial.diffuse");
+   uniform4(mMaterialDiffuseLocation, 1, &material.mDiffuse);
+   if(mMaterialSpecularLocation == -1)
+      mMaterialSpecularLocation = uniformLocation("objectMaterial.specular");
+   uniform4(mMaterialSpecularLocation, 1, &material.mSpecular);
+   if(mMaterialShininessLocation == -1)
+      mMaterialShininessLocation = uniformLocation("objectMaterial.shininess");
+   uniform1(mMaterialShininessLocation, 1, &material.mShininess);
+}
 
-   uniform4(mDiffuseLocation, 1, &color);
+void GridShader::setLight(const Light& light)
+{
+   if(mLightPositionLocation == -1)
+      mLightPositionLocation = uniformLocation("light.position");
+   uniform3(mLightPositionLocation, 1, &light.mPosition);
+   if(mLightAmbientLocation == -1)
+      mLightAmbientLocation = uniformLocation("light.ambient");
+   uniform4(mLightAmbientLocation, 1, &light.mAmbient);
+   if(mLightDiffuseLocation == -1)
+      mLightDiffuseLocation = uniformLocation("light.diffuse");
+   uniform4(mLightDiffuseLocation, 1, &light.mDiffuse);
+   if(mLightSpecularLocation == -1)
+      mLightSpecularLocation = uniformLocation("light.specular");
+   uniform4(mLightSpecularLocation, 1, &light.mSpecular);
+   if(mLightAttenuationLocation == -1)
+      mLightAttenuationLocation = uniformLocation("light.attenuation");
+   uniform1(mLightAttenuationLocation, 1, &light.mAttenuation);
 }
 
 void GridShader::setEye(const Vector3f& eye)
@@ -363,7 +398,8 @@ void Grid::bindShader(const Camera& camera)
    Matrix4f mvp = camera.getP() * v * mTransform;
    mShader.setMVP(mvp);
    mShader.setM(mTransform);
-   mShader.setDiffuse(Vector4f(0.0f, 0.1f, 1.0f, 1.0f));
+   mShader.setObjectMaterial(mMaterial);
+   mShader.setLight(mLight);
    mShader.setEye(camera.getPosition());
 }
 
@@ -392,9 +428,9 @@ void Grid::render(const Camera& camera)
    glCullFace(GL_FRONT_AND_BACK);
 
    int indicesCount =
-      (mDimensions.y - 1) * 2 * mDimensions.x //points count for each stripe(stripes count = GRID_SIZE - 1)
+      (mDimensions.y - 1) * 2 * mDimensions.x   //points count for each stripe(stripes count = GRID_SIZE - 1)
       +
-      mDimensions.y - 2;                    //duplicated vertices
+      mDimensions.y - 2;                        //duplicated vertices
 #if 0
    glLineWidth(1);
    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -427,4 +463,14 @@ void Grid::render(const Camera& camera)
 void Grid::setTransform(const Matrix4f& transform)
 {
    mTransform = transform;
+}
+
+void Grid::setMaterial(const Material& material)
+{
+   mMaterial = material;
+}
+
+void Grid::setLight(const Light& light)
+{
+   mLight = light;
 }
