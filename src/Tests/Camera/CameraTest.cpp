@@ -4,25 +4,8 @@
 
 #include <vector>
 
-AxesShader::AxesShader()
-: mMVPLocation(-1)
-{
-
-}
-
-void AxesShader::setMVP(const Matrix4f& mvp)
-{
-   if(mMVPLocation == -1)
-      mMVPLocation = uniformLocation("uMVP");
-
-   uniformMatrix4(mMVPLocation, 1, &mvp);
-   checkGLError("Pass mvp to axes shader");
-}
-
 CameraTest::CameraTest(const Director& director, const std::string& name)
-: Test(director, name)
-, mCamera(director)
-, mTime(0.0f)
+: ICameraTest(director, name)
 {
 
 }
@@ -50,28 +33,21 @@ void CameraTest::initWorldAxes()
 
 void CameraTest::init()
 {
-   for(int i = 0; i < CHARS_COUNT; i++)
-   {
-      mKeyState[i] = false;
-   }
+   ICameraTest::init();
 
    initWorldAxes();
 
    const Vector2i dimensions(300, 300);
+   mGrid.setDimensions(dimensions);
    const Vector2f size(10.0f, 10.0f);
-   mGrid.init(dimensions, size);
+   mGrid.setSize(size);
+   mGrid.init();
    Material material(Vector4f(0.0f, 0.0f, 0.0f, 1.0f), Vector4f(0.0f, 0.0f, 1.0f, 1.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 4.0f);
    mGrid.setMaterial(material);
    Light light(Vector3f(3.0f, 3.0f, 3.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 8.0f);
    mGrid.setLight(light);
 
    mAxesShader.load("Data/Shader/Camera/axes.vs", "Data/Shader/Common/colored.fs");
-
-   mCamera.setPosition(Vector3f(0.0f, 0.0f, 0.0f));
-   mCamera.setLookAt(Vector3f(0.0f, 0.0f, -1.0f));
-   mCamera.setFOV(80.0f);
-   mCamera.setProjectionType(Camera::P_PERSPECTIVE);
-   mCamera.update();
 }
 
 void CameraTest::deinit()
@@ -83,37 +59,6 @@ void CameraTest::deinit()
    mAxesShader.deinit();
 
    checkGLError("Delete GL objects");
-}
-
-void CameraTest::updateCamera()
-{
-   Vector3f cameraVelocity;
-   if(mKeyState['A'])
-   {
-      cameraVelocity.x -= 1.0f;
-   }
-   if(mKeyState['D'])
-   {
-      cameraVelocity.x += 1.0f;
-   }
-   if(mKeyState['W'])
-   {
-      cameraVelocity.z += 1.0f;
-   }
-   if(mKeyState['S'])
-   {
-      cameraVelocity.z -= 1.0f;
-   }
-   if(mKeyState['1'])
-   {
-      cameraVelocity.y += 1.0f;
-   }
-   if(mKeyState['2'])
-   {
-      cameraVelocity.y -= 1.0f;
-   }
-   mCamera.setVelocity(cameraVelocity);
-   mCamera.update();
 }
 
 void CameraTest::renderWorldAxes()
@@ -140,45 +85,13 @@ void CameraTest::renderWorldAxes()
 
 void CameraTest::run()
 {
+   ICameraTest::run();
+
    //mTime += mDirector.getTimeDelta() * 10.0f;
    //Matrix4f transform = Matrix4f::createRotationAroundAxis(0.0f, mTime, 0.0f);
    //mGrid.setTransform(transform);
 
-   updateCamera();
-
    renderWorldAxes();
 
    mGrid.render(mCamera);
-}
-
-void CameraTest::onTouchEvent(TouchEventType eventType, const Vector2f& position)
-{
-   switch (eventType)
-   {
-   case TE_DOWN:
-   case TE_UP:
-      {
-         mLastTouchPosition = position;
-         mCamera.setRotationDelta(Quatf(0.0f, 0.0f, 0.0f, 0.0f));
-      }
-      break;
-   case TE_MOVE:
-      {
-         Vector2f delta = position - mLastTouchPosition;
-
-         Quatf rotationDeltaQ = Quatf::fromAxisRot(Vector3f(1.0f, 0.0f, 0.0f), delta.y) * Quatf::fromAxisRot(Vector3f(0.0f, 1.0f, 0.0f), delta.x);
-         mCamera.setRotationDelta(rotationDeltaQ);
-         mCamera.setYawPitch(-delta.x, -delta.y);
-
-         mLastTouchPosition = position;
-      }
-      break;
-   }
-}
-
-void CameraTest::onKeyboardEvent(KeyboardEventType eventType, int keyCode)
-{
-   int sign = 1;
-
-   mKeyState[keyCode] = eventType == KE_DOWN;
 }

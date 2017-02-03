@@ -1,5 +1,6 @@
 #include "Render/ParticleSystem.h"
 #include "Render/RenderContext.h"
+#include "Platform/Log.h"
 
 const int quadVerticesCount = 4;
 
@@ -62,23 +63,52 @@ void ParticleSystemShader::setTextureUnit(const int textureUnit)
    uniform1i(mTextureUnitLocation, 1, &textureUnit);
 }
 
+struct InParticle
+{
+   InParticle(const Vector4f& positionTtl, const Vector4f& velocitySize, const Vector4f& alphaAge)
+      : mPositionTtl(positionTtl)
+      , mVelocitySize(velocitySize)
+      , mAlphaAge(alphaAge)
+   {
+   }
+
+   Vector4f mPositionTtl;
+   Vector4f mVelocitySize;
+   Vector4f mAlphaAge;
+};
+
+struct OutParticle
+{
+   OutParticle(const Vector4f& positionSize, const Vector4f& color)
+      : mPositionSize(positionSize)
+      , mColor(color)
+   {
+   }
+
+   Vector4f mPositionSize;
+   Vector4f mColor;
+};
+
 ParticleSystem::ParticleSystem()
 : mCount(0)
 , mTtl(0.0f)
 , mSize(0.0f)
 , mEmitter(NULL)
-, mQuad(GL_ARRAY_BUFFER, 0, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), 0)
-, mPositionsTtl(GL_SHADER_STORAGE_BUFFER, 1, 4, GL_FLOAT, GL_FALSE, sizeof(Vector4f), 1)
-, mCurrentPositionsAge(GL_SHADER_STORAGE_BUFFER, 2, 4, GL_FLOAT, GL_FALSE, sizeof(Vector4f), 1)
+, mQuad(GL_ARRAY_BUFFER, 0, 0)
+, mInParticles(0, 0, 0)
+, mOutParticles(1, 1, 1)
 , mColorRangeR(0.2f, 1.0f)
 , mColorRangeG(0.2f, 1.0f)
 , mColorRangeB(0.2f, 1.0f)
 , mColorRangeA(0.5f, 1.0f)
-, mColors(GL_SHADER_STORAGE_BUFFER, 3, 4, GL_FLOAT, GL_FALSE, sizeof(Vector4f), 1)
-, mVelocitiesSize(GL_SHADER_STORAGE_BUFFER, 4, 4, GL_FLOAT, GL_FALSE, sizeof(Vector4f), 1)
-, mAlpha(GL_SHADER_STORAGE_BUFFER, 5, 4, GL_FLOAT, GL_FALSE, sizeof(Vector4f), 1)
 {
+   mQuad.addAttribute(Attribute(3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), 0));
 
+   mOutParticles.addAttribute(Attribute(4, GL_FLOAT, GL_FALSE, sizeof(OutParticle), 0));                 //current position, size
+   mOutParticles.addAttribute(Attribute(4, GL_FLOAT, GL_FALSE, sizeof(OutParticle), sizeof(Vector4f)));  //color
+
+   GLint stride;
+   glGetIntegerv(GL_MAX_VERTEX_ATTRIB_STRIDE, &stride);   logMsg("stride: %d", stride);
 }
 
 void ParticleSystem::setCount(const int count)
@@ -119,28 +149,28 @@ void ParticleSystem::init()
    {
       mQuad.setData(quadVerticesCount * sizeof(Vector3f), vertices);
 
-      std::vector<Vector4f> positionTtl;
-      std::vector<Vector4f> color;
-      std::vector<Vector4f> velocitySize;
-      std::vector<Vector4f> currentPositionAge;
-      std::vector<Vector4f> alpha;
+      std::vector<InParticle> inParticles;
+      std::vector<OutParticle> outParticles;
 
       for(int i = 0; i < mCount; i++)
       {
          Vector3f position = mEmitter->getPosition();
-         positionTtl.push_back(Vector4f(position, mTtl));
-         currentPositionAge.push_back(Vector4f(Vector3f(), mTtl * i / mCount));
-         color.push_back(Vector4f(mColorRangeR.get(), mColorRangeG.get(), mColorRangeB.get(), 0.0f));
-         Vector3f velocity = mEmitter->getVelocity();
-         velocitySize.push_back(Vector4f(velocity, mSize));
-         alpha.push_back(Vector4f(mColorRangeA.get(), 0.0f, 0.0f, 0.0f));
+         InParticle inParticle(
+            Vector4f(position, mTtl),
+            Vector4f(mEmitter->getVelocity(), mSize),
+            Vector4f(mColorRangeA.get(), mTtl * i / mCount, 0.0f, 0.0f)
+            );
+         inParticles.push_back(inParticle);
+
+         OutParticle outParticle(
+            Vector4f(Vector3f(), mSize),
+            Vector4f(mColorRangeR.get(), mColorRangeG.get(), mColorRangeB.get(), 0.0f)
+            );
+         outParticles.push_back(outParticle);
       }
 
-      mPositionsTtl.setData(mCount * sizeof(Vector4f), &positionTtl[0]);
-      mCurrentPositionsAge.setData(mCount * sizeof(Vector4f), &currentPositionAge[0]);
-      mColors.setData(mCount * sizeof(Vector4f), &color[0]);
-      mVelocitiesSize.setData(mCount * sizeof(Vector4f), &velocitySize[0]);
-      mAlpha.setData(mCount * sizeof(Vector4f), &alpha[0]);
+      mInParticles.setData(mCount * sizeof(InParticle), &inParticles[0]);
+      mOutParticles.setData(mCount * sizeof(OutParticle), &outParticles[0]);
 
       mComputeShader.load("Data/Shader/ParticleSystem/particleSystem.cs", GL_COMPUTE_SHADER);
       mRenderShader.load("Data/Shader/ParticleSystem/particleSystem.vs", "Data/Shader/ParticleSystem/ParticleSystem.fs");
@@ -150,23 +180,15 @@ void ParticleSystem::init()
 void ParticleSystem::deinit()
 {
    mQuad.deinit();
-   mPositionsTtl.deinit();
-   mColors.deinit();
-   mVelocitiesSize.deinit();
-   mCurrentPositionsAge.deinit();
-   mAlpha.deinit();
+   mInParticles.deinit();
    mComputeShader.deinit();
    mRenderShader.deinit();
 }
 
 void ParticleSystem::render(const Matrix4f& v, const Matrix4f& p)
 {
-   mPositionsTtl.bindShaderStorage();
-   mColors.bindShaderStorage();
-   mVelocitiesSize.bindShaderStorage();
-   mCurrentPositionsAge.bindShaderStorage();
-   mAlpha.bindShaderStorage();
-   checkGLError("bind ssbo");
+   mInParticles.bindShaderStorage();
+   mOutParticles.bindShaderStorage();
 
    mComputeShader.bind();
    const int workGroupSize = 64;
@@ -184,20 +206,13 @@ void ParticleSystem::render(const Matrix4f& v, const Matrix4f& p)
    mRenderShader.setTextureUnit(textureUnit);
 
    mQuad.enable();
-   mPositionsTtl.enable();
-   mCurrentPositionsAge.enable();
-   mColors.enable();
-   mVelocitiesSize.enable();
-   mAlpha.enable();
+   mOutParticles.enable();
 
    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, quadVerticesCount, mCount);
    checkGLError("instanced draw");
 
    mQuad.disable();
-   mPositionsTtl.disable();
-   mColors.disable();
-   mCurrentPositionsAge.disable();
-   mAlpha.disable();
+   mOutParticles.disable();
    
    glBindBuffer(GL_ARRAY_BUFFER, 0);
 

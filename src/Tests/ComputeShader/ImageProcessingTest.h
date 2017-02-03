@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Render/Buffer.h"
+#include "Render/ShaderStorageBuffer.h"
 #include "Render/Shader.h"
 #include "Render/Texture.h"
 #include "Tests/Test.h"
@@ -76,8 +76,8 @@ namespace ComputeShaders
       RenderShader mRenderShader;
       Buffer mQuad;
       Texture mBgTexture;
-      Buffer mImageInfos;
-      Buffer mFlatImageData;
+      ShaderStorageBuffer mImageInfos;
+      ShaderStorageBuffer mFlatImageData;
       Texture mDstTexture;
       int mUpdateImageDelay; //delay for texture update, frames
       int mFramesSinceImageUpdate;

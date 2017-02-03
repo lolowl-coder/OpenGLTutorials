@@ -81,9 +81,9 @@ void CheckerShader::setUniforms(const int textureUnit, const Vector3f& offset, c
 
 GlowTest::GlowTest(const Director& director, const std::string& name)
 : Test(director, name)
-, mQuad(GL_ARRAY_BUFFER, 0, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), 0)
+, mQuad(GL_ARRAY_BUFFER, 0, 0)
 {
-
+   mQuad.addAttribute(Attribute(3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), 0));
 }
 
 static Vector3f vertices[] =

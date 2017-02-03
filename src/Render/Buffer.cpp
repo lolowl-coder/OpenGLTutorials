@@ -1,17 +1,18 @@
 #include "Render/Buffer.h"
 #include "Render/RenderContext.h"
 
-Buffer::Buffer(GLenum target, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLuint divisor)
+Buffer::Buffer(const GLenum target, const GLuint divisor, int attributesOffset)
 : mId(0)
 , mTarget(target)
-, mIndex(index)
-, mSize(size)
-, mType(type)
-, mNormalized(normalized)
-, mStride(stride)
 , mDivisor(divisor)
+, mAttributesOffset(attributesOffset)
 {
 
+}
+
+void Buffer::addAttribute(const Attribute& attribute)
+{
+   mAttributes.push_back(attribute);
 }
 
 void Buffer::setData(unsigned int sizeInBytes, void* data)
@@ -23,12 +24,6 @@ void Buffer::setData(unsigned int sizeInBytes, void* data)
    bind();
    glBufferData(mTarget, sizeInBytes, data, GL_STATIC_DRAW);
    checkGLError("send buffer to gpu");
-}
-
-void Buffer::bindShaderStorage()
-{
-   glBindBufferBase(GL_SHADER_STORAGE_BUFFER, mIndex, mId);
-   checkGLError("bind shader storage buffer");
 }
 
 void Buffer::bindArrayBuffer()
@@ -46,24 +41,28 @@ void Buffer::bind()
 void Buffer::enable()
 {
    bindArrayBuffer();
-   glEnableVertexAttribArray(mIndex);
-   glVertexAttribPointer(mIndex, mSize, mType, mNormalized, mStride, (void *)0);
-   checkGLError("set buffer pointer");
-   if(mDivisor > 0)
+
+   for(int i = 0; i < mAttributes.size(); i++)
    {
-      glVertexAttribDivisor(mIndex, mDivisor);
-      checkGLError("set attrib divisor");
+      mAttributes[i].enable(i + mAttributesOffset);
+      if(mDivisor > 0)
+      {
+         glVertexAttribDivisor(i + mAttributesOffset, mDivisor);
+         checkGLError("set attrib divisor");
+      }
    }
 }
 
 void Buffer::disable()
 {
-   glDisableVertexAttribArray(mIndex);
-   checkGLError("disable vertex attrib array");
-   if(mDivisor > 0)
+   for(int i = 0; i < mAttributes.size(); i++)
    {
-      glVertexAttribDivisor(mIndex, 0);
-      checkGLError("reset attrib divisor");
+      mAttributes[i].disable(i + mAttributesOffset);
+      if(mDivisor > 0)
+      {
+         glVertexAttribDivisor(i + mAttributesOffset, 0);
+         checkGLError("reset attrib divisor");
+      }
    }
 }
 
@@ -75,9 +74,4 @@ void Buffer::deinit()
 GLuint Buffer::getId()
 {
    return mId;
-}
-
-GLuint Buffer::getIndex()
-{
-   return mIndex;
 }

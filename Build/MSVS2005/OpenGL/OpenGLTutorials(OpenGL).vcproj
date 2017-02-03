@@ -266,15 +266,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\LearnOpenGL.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\src\Platform\Log.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\src\MathUtils.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OpenGLTutorials.cpp"
 				>
 			</File>
 			<File
@@ -288,6 +288,10 @@
 			<Filter
 				Name="Render"
 				>
+				<File
+					RelativePath="..\..\..\src\Render\Attribute.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\..\..\src\Render\Buffer.cpp"
 					>
@@ -313,6 +317,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\Render\Object.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\Render\ParticleSystem.cpp"
 					>
 				</File>
@@ -322,6 +330,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\src\Render\Shader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Render\ShaderStorageBuffer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Render\Sphere.cpp"
 					>
 				</File>
 				<File
@@ -340,6 +356,10 @@
 			<Filter
 				Name="Tests"
 				>
+				<File
+					RelativePath="..\..\..\src\Tests\TcTransform\TcTransformTest.h"
+					>
+				</File>
 				<File
 					RelativePath="..\..\..\src\Tests\Test.cpp"
 					>
@@ -376,7 +396,15 @@
 					Name="Camera"
 					>
 					<File
+						RelativePath="..\..\..\src\Tests\Camera\AxesShader.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\Tests\Camera\CameraTest.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Tests\Camera\ICameraTest.cpp"
 						>
 					</File>
 				</Filter>
@@ -393,6 +421,14 @@
 					>
 					<File
 						RelativePath="..\..\..\src\Tests\Glow\GlowTest.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="SphereMapping"
+					>
+					<File
+						RelativePath="..\..\..\src\Tests\SphereMapping\SphereMappingTest.cpp"
 						>
 					</File>
 				</Filter>
@@ -431,6 +467,10 @@
 				Name="Render"
 				>
 				<File
+					RelativePath="..\..\..\src\Render\Attribute.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\Render\Buffer.h"
 					>
 				</File>
@@ -455,6 +495,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\Render\Object.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\Render\ParticleSystem.h"
 					>
 				</File>
@@ -468,6 +512,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\src\Render\Shader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Render\ShaderStorageBuffer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Render\Sphere.h"
 					>
 				</File>
 				<File
@@ -522,7 +574,15 @@
 					Name="Camera"
 					>
 					<File
+						RelativePath="..\..\..\src\Tests\Camera\AxesShader.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\Tests\Camera\CameraTest.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Tests\Camera\ICameraTest.h"
 						>
 					</File>
 				</Filter>
@@ -539,6 +599,14 @@
 					>
 					<File
 						RelativePath="..\..\..\src\Tests\Glow\GlowTest.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="SphereMapping"
+					>
+					<File
+						RelativePath="..\..\..\src\Tests\SphereMapping\SphereMappingTest.h"
 						>
 					</File>
 				</Filter>

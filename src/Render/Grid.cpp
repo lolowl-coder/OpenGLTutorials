@@ -1,7 +1,7 @@
 #include "Platform/Log.h"
 #include "Render/Grid.h"
-#include "Render/RenderContext.h"
 #include "Render/GLHeaders.h"
+#include "Render/RenderContext.h"
 
 GridShader::GridShader()
 : mMVPLocation(-1)
@@ -108,7 +108,6 @@ struct Vertex
 };
 
 Grid::Grid()
-: mNormals(GL_ARRAY_BUFFER, 0, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), 0)
 {
 }
 
@@ -308,11 +307,8 @@ Vector3f Grid::genVertex(const int row, const int col)
    return Vector3f(x, y, z);
 }
 
-void Grid::init(const Vector2i& dimensions, const Vector2f& size)
+void Grid::init()
 {
-   mDimensions = dimensions;
-   mSize = size;
-
    std::vector<Vertex> gridVertices;
    std::vector<GLuint> gridIndices;
    std::vector<Vector3f> gridNormals;
@@ -361,16 +357,16 @@ void Grid::init(const Vector2i& dimensions, const Vector2f& size)
       }
    }
 
-   glGenBuffers(1, &mGridVBO);
+   glGenBuffers(1, &mVBO);
    checkGLError("Gen grid vbo");
-   glBindBuffer(GL_ARRAY_BUFFER, mGridVBO);
+   glBindBuffer(GL_ARRAY_BUFFER, mVBO);
    checkGLError("Bind grid vbo");
    glBufferData(GL_ARRAY_BUFFER, gridVertices.size() * sizeof(Vertex), &gridVertices[0], GL_STATIC_DRAW);
    checkGLError("Pass grid vertices to GPU");
 
-   glGenBuffers(1, &mGridIBO);
+   glGenBuffers(1, &mIBO);
    checkGLError("Gen grid ibo");
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mGridIBO);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
    checkGLError("Bind grid ibo");
    glBufferData(GL_ELEMENT_ARRAY_BUFFER, gridIndices.size() * sizeof(GLuint), &gridIndices[0], GL_STATIC_DRAW);
    checkGLError("Pass grid indices to GPU");
@@ -383,8 +379,9 @@ void Grid::init(const Vector2i& dimensions, const Vector2f& size)
 
 void Grid::deinit()
 {
-   glDeleteBuffers(1, &mGridVBO);
-   glDeleteBuffers(1, &mGridIBO);
+   glDeleteBuffers(1, &mVBO);
+   glDeleteBuffers(1, &mIBO);
+
    mNormals.deinit();
 
    mShader.deinit();
@@ -409,10 +406,10 @@ void Grid::render(const Camera& camera)
 
    glEnable(GL_DEPTH_TEST);
 
-   glBindBuffer(GL_ARRAY_BUFFER, mGridVBO);
+   glBindBuffer(GL_ARRAY_BUFFER, mVBO);
    checkGLError("Bind grid vbo");
 
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mGridIBO);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
    checkGLError("Bind grid ibo");
 
    glEnableVertexAttribArray(0);
@@ -460,17 +457,13 @@ void Grid::render(const Camera& camera)
 #endif
 }
 
-void Grid::setTransform(const Matrix4f& transform)
+void Grid::setDimensions(const Vector2i& dimensions)
 {
-   mTransform = transform;
+   mDimensions = dimensions;
 }
 
-void Grid::setMaterial(const Material& material)
+void Grid::setSize(const Vector2f& size)
 {
-   mMaterial = material;
+   mSize = size;
 }
 
-void Grid::setLight(const Light& light)
-{
-   mLight = light;
-}

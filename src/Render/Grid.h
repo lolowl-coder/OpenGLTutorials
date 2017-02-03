@@ -4,6 +4,7 @@
 #include "Render/Buffer.h"
 #include "Render/Light.h"
 #include "Render/Material.h"
+#include "Render/Object.h"
 #include "Render/Shader.h"
 
 class GridShader : public Shader
@@ -45,17 +46,17 @@ private:
    GLint mMVPLocation;
 };
 
-class Grid
+class Grid : public Object
 {
 public:
    Grid();
 
-   void init(const Vector2i& dimensions, const Vector2f& size);
-   void deinit();
-   void render(const Camera& camera);
-   void setTransform(const Matrix4f& transform);
-   void setMaterial(const Material& material);
-   void setLight(const Light& light);
+   virtual void init();
+   virtual void deinit();
+   virtual void render(const Camera& camera);
+
+   void setDimensions(const Vector2i& dimensions);
+   void setSize(const Vector2f& size);
 
 private:
    bool genNormalHelper(const Vector3f& v, const Vector2i& rowCol, const Vector2i& normal0Offset, const Vector2i& normal1Offset, Vector3f& accumulatedNormal);
@@ -64,14 +65,8 @@ private:
    void bindShader(const Camera& camera);
 
 private:
-   Material mMaterial;
-   Light mLight;
-   Matrix4f mTransform;
    Vector2i mDimensions;
-   GLuint mGridVBO;
-   GLuint mGridIBO;
    GridShader mShader;
    NormalShader mNormalShader;
-   Buffer mNormals;
    Vector2f mSize;
 };

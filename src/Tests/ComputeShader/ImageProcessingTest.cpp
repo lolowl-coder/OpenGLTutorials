@@ -50,13 +50,13 @@ namespace ComputeShaders
 
    ImageProcessingTest::ImageProcessingTest(const Director& director, const std::string& name)
    : Test(director, name)
-   , mQuad(GL_ARRAY_BUFFER, 0, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), 0)
-   , mImageInfos(GL_SHADER_STORAGE_BUFFER, 0, 0, GL_NONE, GL_NONE, 0, 0) //fill target and index only
-   , mFlatImageData(GL_SHADER_STORAGE_BUFFER, 1, 0, GL_NONE, GL_NONE, 0, 0) //fill target and index only
+   , mQuad(GL_ARRAY_BUFFER, 0, 0)
+   , mImageInfos(0, 0, 0)
+   , mFlatImageData(1, 0, 0)
    , mUpdateImageDelay(10)
    , mFramesSinceImageUpdate(0)
    {
-
+      mQuad.addAttribute(Attribute(3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), 0));
    }
 
    static Vector3f quadVertices[] = {

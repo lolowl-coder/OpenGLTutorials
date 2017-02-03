@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Render/Buffer.h"
+#include "Render/ShaderStorageBuffer.h"
 #include "Render/Shader.h"
 #include "Render/Texture.h"
 #include "vmath.h"
@@ -96,15 +96,12 @@ private:
    Emitter* mEmitter;
    
    Buffer mQuad;
-   Buffer mPositionsTtl;
-   Buffer mCurrentPositionsAge;
+   ShaderStorageBuffer mInParticles;
+   ShaderStorageBuffer mOutParticles;
    Rangef mColorRangeR;
    Rangef mColorRangeG;
    Rangef mColorRangeB;
    Rangef mColorRangeA;
-   Buffer mColors;
-   Buffer mVelocitiesSize;
-   Buffer mAlpha;
 
    Texture mTexture;
    ParticleSystemShader mRenderShader;
