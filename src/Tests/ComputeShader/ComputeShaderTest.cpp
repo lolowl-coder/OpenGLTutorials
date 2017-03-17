@@ -36,6 +36,7 @@ ComputeShaderTest::ComputeShaderTest(const Director& director, const std::string
 , mDimensionsLocation(-1)
 , mOriginLocation(-1)
 , mStepLocation(-1)
+, mDtLocation(-1)
 {
 }
 
@@ -94,9 +95,9 @@ void ComputeShaderTest::init()
       int col = i - row * NUM_PARTICLES_Y;
       //if(row > 30 && row < 60 && col > 30 && col < 60)
       {
-         velocity[i].x = Ranf(-MAX_VELOCITY, MAX_VELOCITY);
-         velocity[i].y = Ranf(-MAX_VELOCITY, MAX_VELOCITY);
-         velocity[i].z = Ranf(0.0f, 0.0f);
+         velocity[i].x = 0.0f;
+         velocity[i].y = 0.0f;
+         velocity[i].z = 0.0f;
       }
    }
    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
@@ -106,6 +107,7 @@ void ComputeShaderTest::init()
    mComputeShader.load("Data/Shader/ComputeShader/compute.cs", GL_COMPUTE_SHADER);
    mFrameIdLocation = mComputeShader.uniformLocation("u_frameId");
    mStepLocation = mComputeShader.uniformLocation("u_step");
+   mDtLocation = mComputeShader.uniformLocation("u_dt");
    mDimensionsLocation = mComputeShader.uniformLocation("u_dimensions");
    mRenderShader.load("Data/Shader/ComputeShader/compute.vs", "Data/Shader/Common/colored.fs");
    mOriginLocation = mRenderShader.uniformLocation("u_origin");
@@ -138,6 +140,8 @@ void ComputeShaderTest::run()
    mComputeShader.uniform1i(mFrameIdLocation, 1, &mFrameId);
    Vector3f step(SCALE / NUM_PARTICLES_X, SCALE / NUM_PARTICLES_Y, 1.0f);
    mComputeShader.uniform3(mStepLocation, 1, &step);
+   float dt = mDirector.getTimeDelta();
+   mComputeShader.uniform1(mDtLocation, 1, &dt);
    mFrameId++;
    glDispatchCompute(NUM_PARTICLES / WORK_GROUP_SIZE, 1, 1);
    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
@@ -170,6 +174,7 @@ void ComputeShaderTest::run()
    checkGLError("render particles");
 
    //setSpot(Vector2i(Ranf(0.0f, 1024.0f), Ranf(1024.0f - 20.0f, 1024.0f)));
+   //setSpot(Vector2f(sin((float)time) * 20.0f + 400.0f, cos((float)time) * 20.0f + 400.0f), Vector2f(-0.1f, 0.0f));
 }
 
 void ComputeShaderTest::setSpot(const Vector2f& position, const Vector2f& v)
@@ -227,13 +232,13 @@ void ComputeShaderTest::onTouchEvent(TouchEventType eventType, const Vector2f& p
    Vector2f viewSize = mDirector.getViewSize();
    const Vector2f p(position.x, viewSize.y - 1.0f - position.y);
 
-   if(eventType == TE_MOVE)
+   if(eventType == TE_MOVE || eventType == TE_DOWN)
    {
       Vector2f v(p - mLastTouchPosition);
       float l = v.length();
       if(l > 0.000001)
       {
-         const int spotsCount = (int)std::max(2.0f, l / SPOT_SIZE);
+         const int spotsCount = (int)std::max(2.0f, l / SPOT_SIZE) * 2;
          
          Vector2f lastPosition = mLastTouchPosition;
          for(int i = 1; i < spotsCount; i++)
@@ -241,9 +246,14 @@ void ComputeShaderTest::onTouchEvent(TouchEventType eventType, const Vector2f& p
             float t = i / ((float)spotsCount - 1.0f);
             Vector2f currentPosition = mLastTouchPosition + v * t;
             
-            setSpot(currentPosition, (currentPosition - lastPosition) * 0.1f);
+            Vector2f currentV = currentPosition - lastPosition;
+            currentV.x /= NUM_PARTICLES_X;
+            currentV.y /= NUM_PARTICLES_Y;
+
+            setSpot(currentPosition, currentV);
             lastPosition = currentPosition;
          }
+         //setSpot(p, v);
       }
    }
    mLastTouchPosition = p;

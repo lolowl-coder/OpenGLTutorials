@@ -30,5 +30,6 @@ private:
    GLint mDimensionsLocation;
    GLint mOriginLocation;
    GLint mStepLocation;
+   GLint mDtLocation;
    Vector2i mLastTouchPosition;
 };

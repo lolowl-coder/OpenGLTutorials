@@ -35,7 +35,7 @@ enum TestType
 };
 
 Test* currentTest = NULL;
-TestType currentTestType = TT_PARTICLE_SYSTEM;
+TestType currentTestType = TT_COMPUTE_SHADER;
 bool lButtonPressed = false;
 
 TestType tests[TT_COUNT];
@@ -302,6 +302,7 @@ int _tmain(int argc, _TCHAR* argv[])
       framesCount++;
       currentTime = t;
       director.setTimeDelta((float)timeDelta);
+      director.setTime((float)t);
 
       if(fpsUpdateTime > 1.0)
       {

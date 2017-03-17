@@ -4,6 +4,7 @@ Director::Director()
 : mFrame(0)
 , mViewSize(800.0f, 800.0f)
 , mTimeDelta(0.0f)
+, mTime(0.0f)
 , mAppName("OpenGL-application")
 {
 
@@ -29,9 +30,19 @@ float Director::getTimeDelta() const
    return mTimeDelta;
 }
 
-void Director::setTimeDelta(float timeDelta)
+float Director::getTime() const
+{
+   return mTime;
+}
+
+void Director::setTimeDelta(const float timeDelta)
 {
    mTimeDelta = timeDelta;
+}
+
+void Director::setTime(const float time)
+{
+   mTime = time;
 }
 
 std::string Director::getAppName()

@@ -337,10 +337,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Render\Sphere.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\src\Render\Texture.cpp"
 					>
 				</File>
@@ -356,10 +352,6 @@
 			<Filter
 				Name="Tests"
 				>
-				<File
-					RelativePath="..\..\..\src\Tests\TcTransform\TcTransformTest.h"
-					>
-				</File>
 				<File
 					RelativePath="..\..\..\src\Tests\Test.cpp"
 					>
@@ -421,14 +413,6 @@
 					>
 					<File
 						RelativePath="..\..\..\src\Tests\Glow\GlowTest.cpp"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="SphereMapping"
-					>
-					<File
-						RelativePath="..\..\..\src\Tests\SphereMapping\SphereMappingTest.cpp"
 						>
 					</File>
 				</Filter>
@@ -599,14 +583,6 @@
 					>
 					<File
 						RelativePath="..\..\..\src\Tests\Glow\GlowTest.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="SphereMapping"
-					>
-					<File
-						RelativePath="..\..\..\src\Tests\SphereMapping\SphereMappingTest.h"
 						>
 					</File>
 				</Filter>
