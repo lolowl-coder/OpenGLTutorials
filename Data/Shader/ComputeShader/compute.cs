@@ -5,8 +5,6 @@ uniform vec3 u_step;
 uniform vec2 u_dimensions;
 uniform float u_dt;
 
-#define USE_BLI 0
-
 layout( std140, binding=1 ) buffer Pos
 {
    vec4 Position[ ];
@@ -72,125 +70,93 @@ vec3 avg2(vec3 v0, vec3 v1)
    return (v0 + v1) * 0.5;
 }
 
+float samplePressure(float row, float col, uint gid)
+{
+   /*const float border = 0.01;
+   if(col < border || col > 1.0 - border ||
+      row < border || row > 1.0 - border)
+   {
+      return 0.0;
+   }*/
+
+   //return TFD[gid].y;
+   return rand(vec2(row, col));
+}
+
 void main()
 {
    uint gid = gl_GlobalInvocationID.x;
-   //float l = length(Position[gid].xy);
+   
+   vec2 v = Velocity[gid].zw;
 
-   //if(l > 0.0)
-   //{
-      //float dt = 0.01;
-      const float damp = 1.0;
-      
-      vec3 v = Velocity[gid].xyz * u_dt;
+   //find previous position
+   vec2 prevPos = Position[gid].xy - v * u_dt * 50.0;
+   //col, row of prev position
+   float col = clamp(trunc(prevPos.x / u_step.x), 0.0, u_dimensions.x);
+   float row = clamp(trunc(prevPos.y / u_step.y), 0.0, u_dimensions.y);
+   float prevCol = clamp(col - 1.0, 0.0, u_dimensions.x);
+   float nextCol = clamp(col + 1.0, 0.0, u_dimensions.x);
+   float prevRow = clamp(row - 1.0, 0.0, u_dimensions.y);
+   float nextRow = clamp(row + 1.0, 0.0, u_dimensions.y);
 
-      //find previous position
-      vec3 prevPos = Position[gid].xyz - v;
-      //indices of prev position
-      float prevCol = round(prevPos.x / u_step.x);
-      float prevRow = round(prevPos.y / u_step.y);
- 
-      //find cell index and local t parameter
-      /*vec3 t = vec3(
-         modf(prevPos.x / u_step.x, prevCol),
-         modf(prevPos.y / u_step.y, prevRow),
-         0.0);*/
-         
-      //prevCol += 1.0;
-         
-   #if USE_BLI
-      uint v0Index = uint((prevRow) * u_dimensions.x + prevCol);
-      uint v1Index = uint((prevRow) * u_dimensions.x + prevCol + 1.0);
-      uint v2Index = uint((prevRow + 1.0) * u_dimensions.x + prevCol + 1.0);
-      uint v3Index = uint((prevRow + 1.0) * u_dimensions.x + prevCol);
+   //advect
+   bool obstacle = col > 0.0 && col < 130.0 && row > 100.0 && row < 200.0;
+   if(obstacle)
+   {
+      //set force inside rectangular area
+      //vec2 force = vec2(1.0, 0.0);
+      vec2 force = vec2(1.0, rand(vec2(float(gid) * 10.0, 0.0)) * 1.0);
+      v += force * u_dt;
+   }
+   
+   // Clamp velocity at borders to zero.
+   if(col > u_dimensions.x - 1.0 ||
+      row > u_dimensions.y - 1.0 ||
+      col < 0.0 ||
+      row < 0.0)
+   {
+      v = vec2(0.0, 0.0);
+   }
 
-      float d0 = (1.0 - t.x) * (1.0 - t.y);
-      float d1 = t.x * (1.0 - t.y);
-      float d2 = t.x * t.y;
-      float d3 = (1.0 - t.x) * t.y;
+   Velocity[gid].xy = v;
 
-      vec3 tfd0 = TFD[v0Index].xyz;
-      vec3 tfd1 = TFD[v1Index].xyz;
-      vec3 tfd2 = TFD[v2Index].xyz;
-      vec3 tfd3 = TFD[v3Index].xyz;
+   //divergence
+   uint leftGid   = uint(clamp(row     * u_dimensions.x + prevCol, 0.0, u_dimensions.x));
+   uint rightGid  = uint(clamp(row     * u_dimensions.x + nextCol, 0.0, u_dimensions.x));
+   uint bottomGid = uint(clamp(prevRow * u_dimensions.x + col    , 0.0, u_dimensions.y));
+   uint topGid    = uint(clamp(nextRow * u_dimensions.x + col    , 0.0, u_dimensions.y));
+   float x0 = Velocity[leftGid].x;
+   float x1 = Velocity[rightGid].x;
+   float y0 = Velocity[bottomGid].y;
+   float y1 = Velocity[topGid].y;
+   float divergence = ((x1 - x0) + (y1 - y0)) * 0.5;
+   //TFD[gid].x = divergence;
 
-      vec3 v0 = Velocity[v0Index].xyz;
-      vec3 v1 = Velocity[v1Index].xyz;
-      vec3 v2 = Velocity[v2Index].xyz;
-      vec3 v3 = Velocity[v3Index].xyz;
-
-      vec3 vel = v0 * d0 + v1 * d1 + v2 * d2 + v3 * d3;
-      /*vec3 noise = vec3(
-         rand(vec2(float(gid), 0.0)) - 0.5,
-         rand(vec2(float(gid + uint(u_frameId)), 0.0)) - 0.5, 0.0);*/
-      Velocity[gid].xyz = vel/* + noise * 0.03*/ * damp;
-      vec3 tfd = (tfd0 * d0 + tfd1 * d1 + tfd2 * d2 + tfd3 * d3) * damp;
-      TFD[gid].xyz = tfd;
-   #else
-      uint v0Index = uint((prevRow - 1.0) * u_dimensions.x + prevCol - 1.0);
-      uint v1Index = uint((prevRow + 1.0) * u_dimensions.x + prevCol + 1.0);
-      uint v2Index = uint((prevRow - 1.0) * u_dimensions.x + prevCol + 1.0);
-      uint v3Index = uint((prevRow + 1.0) * u_dimensions.x + prevCol - 1.0);
-      uint v4Index = uint((prevRow      ) * u_dimensions.x + prevCol - 1.0);
-      uint v5Index = uint((prevRow      ) * u_dimensions.x + prevCol + 1.0);
-      uint v6Index = uint((prevRow - 1.0) * u_dimensions.x + prevCol      );
-      uint v7Index = uint((prevRow + 1.0) * u_dimensions.x + prevCol      );
-      uint v8Index = uint((prevRow      ) * u_dimensions.x + prevCol      );
-      vec3 tfd0 = TFD[v0Index].xyz;
-      vec3 tfd1 = TFD[v1Index].xyz;
-      vec3 tfd2 = TFD[v2Index].xyz;
-      vec3 tfd3 = TFD[v3Index].xyz;
-      vec3 tfd4 = TFD[v4Index].xyz;
-      vec3 tfd5 = TFD[v5Index].xyz;
-      vec3 tfd6 = TFD[v6Index].xyz;
-      vec3 tfd7 = TFD[v7Index].xyz;
-      vec3 tfd8 = TFD[v8Index].xyz;
-
-      vec3 v0 = Velocity[v0Index].xyz;
-      vec3 v1 = Velocity[v1Index].xyz;
-      vec3 v2 = Velocity[v2Index].xyz;
-      vec3 v3 = Velocity[v3Index].xyz;
-      vec3 v4 = Velocity[v4Index].xyz;
-      vec3 v5 = Velocity[v5Index].xyz;
-      vec3 v6 = Velocity[v6Index].xyz;
-      vec3 v7 = Velocity[v7Index].xyz;
-      vec3 v8 = Velocity[v8Index].xyz;
-
-      if(prevCol > 100.0 && prevCol < 200.0 && prevRow > 100.0 && prevRow < 200.0)
-      {
-         Velocity[gid].xyz = vec3(0.1, 0.0, 0.0);
-         TFD[gid].xyz = vec3(7000.0, 0.0, 0.0);
-      }
-      else
-      {
-      
-         //vec3 vel = avg(v0, v1, v2, v3, v4, v5, v6, v7, v8, t);
-         //vec3 vel = v8;
-         vec3 vel = v8;
-
-         Velocity[gid].xyz = vel * damp;
-         //vec3 tfd = avg(tfd0, tfd1, tfd2, tfd3, tfd4, tfd5, tfd6, tfd7, tfd8, t) * damp;
-         vec3 tfd = tfd8;
-         TFD[gid].xyz = tfd * damp;
-      }
-#endif
-   /*}
+   //pressure
+   if(obstacle)
+   {
+      x0 = 0.0;
+      x1 = 0.0;
+      y0 = 0.0;
+      y1 = 0.0;
+   }
    else
    {
-      TFD[gid].xyz = vec3(0.0, 0.0, 0.0);
-      Velocity[gid].xy = reflect(Velocity[gid].xy, Position[gid].xy);
-      //Velocity[gid].xy = vec2(0.0, 0.0);
-   }*/
-   Color[gid] = vec4(computeColor(TFD[gid].x), 1.0);
-   //Color[gid] = vec4(v * 3.0, 1.0);
-   //Color[gid] = vec4(vel * 100.0, 1.0);
-   //Color[gid] = vec4(vec3(prevCol / 512.0), 1.0);
-   //Color[gid] = vec4(abs(vel * 3.0), 1.0);
+      x0 = samplePressure(row, col, leftGid);
+      x1 = samplePressure(row, col, rightGid);
+      y0 = samplePressure(row, col, bottomGid);
+      y1 = samplePressure(row, col, topGid);
+   }
 
-   /*if(Temperature[gid] > IGNITION_TEMP)
-   {
-      Fuel[gid] -= FUEL_DECREASE;
-   }*/
+   TFD[gid].y = (x0 + x1 + y0 + y1 - divergence) * 0.25;
 
-   
+   //subtract pressure
+   vec2 pressureGradient = (vec2(x1, y1) - vec2(x0, y0)) * 0.5;
+   Velocity[gid].zw = Velocity[gid].xy - pressureGradient;
+
+   //Color[gid] = vec4(Velocity[gid].xy * 0.1, 0.0, 1.0);
+   Color[gid] = vec4(Velocity[gid].xy, 0.0, 1.0);
+   //Color[gid] = vec4(vec3(prevRow / 512.0), 1.0);
+
+
 }

@@ -108,7 +108,9 @@ struct Vertex
 };
 
 Grid::Grid()
+: mEdges(GL_ARRAY_BUFFER, 0, 0)
 {
+   mEdges.addAttribute(Attribute(3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), 0));
 }
 
 bool Grid::genNormalHelper(const Vector3f& v, const Vector2i& rowCol, const Vector2i& normal0Offset, const Vector2i& normal1Offset, Vector3f& accumulatedNormal)
@@ -302,7 +304,7 @@ Vector3f Grid::genVertex(const int row, const int col)
 {
    float x = col / (float)mDimensions.x * mSize.x;
    float z = row / (float)mDimensions.y * mSize.y;
-   float y = sin(Vector2f(x, z).length() * 10.0f) * 0.05f;
+   float y = sin(Vector2f(x, z).length() * 5.0f) * 0.1f;
    //float y = 0.0f;
    return Vector3f(x, y, z);
 }
@@ -312,6 +314,7 @@ void Grid::init()
    std::vector<Vertex> gridVertices;
    std::vector<GLuint> gridIndices;
    std::vector<Vector3f> gridNormals;
+   std::vector<Vector3f> edges;
 
    /*
    6-7-8
@@ -357,6 +360,11 @@ void Grid::init()
       }
    }
 
+   for(int i = 0; i < gridIndices.size(); i++)
+   {
+      edges.push_back(gridVertices[gridIndices[i]].mPosition + Vector3f(0.0f, 0.01f, 0.0f));
+   }
+
    glGenBuffers(1, &mVBO);
    checkGLError("Gen grid vbo");
    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
@@ -372,6 +380,8 @@ void Grid::init()
    checkGLError("Pass grid indices to GPU");
 
    mNormals.setData(gridNormals.size() * sizeof(Vector3f), &gridNormals[0]);
+
+   mEdges.setData(edges.size() * sizeof(Vector3f), &edges[0]);
 
    mShader.load("Data/Shader/Camera/grid.vs", "Data/Shader/Camera/grid.fs");
    mNormalShader.load("Data/Shader/Camera/normal.vs", "Data/Shader/Camera/normal.fs");
@@ -444,6 +454,17 @@ void Grid::render(const Camera& camera)
    checkGLError("Draw arrays");
    glDisableVertexAttribArray(0);
    glDisableVertexAttribArray(1);
+
+#if 0
+   mNormalShader.bind();
+   mNormalShader.setColor(Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+   mNormalShader.setMVP(camera.getP() * camera.getV() * mTransform);
+   mEdges.enable();
+   glLineWidth(2);
+   glDrawArrays(GL_LINE_STRIP, 0, indicesCount);
+   checkGLError("Draw arrays");
+   mNormals.disable();
+#endif
 
 #if 0
    mNormalShader.bind();

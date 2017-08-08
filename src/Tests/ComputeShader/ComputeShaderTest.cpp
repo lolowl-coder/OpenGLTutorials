@@ -71,19 +71,23 @@ void ComputeShaderTest::init()
    glGenBuffers(1, &tfdSSbo);
    glBindBuffer(GL_SHADER_STORAGE_BUFFER, tfdSSbo);
    glBufferData(GL_SHADER_STORAGE_BUFFER, NUM_PARTICLES * sizeof(Vector4f), NULL, GL_STATIC_DRAW);
-   /*Vector4f *tfd = (Vector4f*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, NUM_PARTICLES * sizeof(Vector4f), bufMask);
+   Vector4f *tfd = (Vector4f*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, NUM_PARTICLES * sizeof(Vector4f), bufMask);
    for(int i = 0; i < NUM_PARTICLES; i++)
    {
       int row = i / NUM_PARTICLES_Y;
       int col = i - row * NUM_PARTICLES_Y;
-      if(row > 30 && row < 60 && col > 30 && col < 60)
+      /*if(row > 30 && row < 60 && col > 30 && col < 60)
       {
          tfd[i].x = Ranf(100.0f, 5000.0f);
          tfd[i].y = Ranf(0.0f, 100.0f);
          tfd[i].z = Ranf(0.0f, 5.0f);
-      }
+      }*/
+      tfd[i].x = 0.0f;
+      tfd[i].y = 0.0f;
+      tfd[i].z = 0.0f;
+      tfd[i].w = 0.0f;
    }
-   glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);*/
+   glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
    glGenBuffers(1, &velocitySSbo);
    glBindBuffer(GL_SHADER_STORAGE_BUFFER, velocitySSbo);
@@ -98,6 +102,7 @@ void ComputeShaderTest::init()
          velocity[i].x = 0.0f;
          velocity[i].y = 0.0f;
          velocity[i].z = 0.0f;
+         velocity[i].w = 0.0f;
       }
    }
    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
@@ -172,9 +177,6 @@ void ComputeShaderTest::run()
    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
    checkGLError("render particles");
-
-   //setSpot(Vector2i(Ranf(0.0f, 1024.0f), Ranf(1024.0f - 20.0f, 1024.0f)));
-   //setSpot(Vector2f(sin((float)time) * 20.0f + 400.0f, cos((float)time) * 20.0f + 400.0f), Vector2f(-0.1f, 0.0f));
 }
 
 void ComputeShaderTest::setSpot(const Vector2f& position, const Vector2f& v)
@@ -187,8 +189,7 @@ void ComputeShaderTest::setSpot(const Vector2f& position, const Vector2f& v)
 
    glBindBuffer(GL_SHADER_STORAGE_BUFFER, tfdSSbo);
    Vector4f *tfd = (Vector4f*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, NUM_PARTICLES * sizeof(Vector4f), bufMask);
-   const Vector4f currentTfd(Ranf(12000.0f, 12000.0f), Ranf(0.0f, 100.0f), Ranf(0.0f, 5.0f), 0.0f);
-   //const Vector4f currentTfd(12000.0f, Ranf(0.0f, 100.0f), Ranf(0.0f, 5.0f), 0.0f);
+   const Vector4f currentTfd(/*Ranf(12000.0f, 12000.0f)*/0.0f, 0.0f, 0.0f, 0.0f);
 
    //for(int i = 0; i < NUM_PARTICLES; i++)
    for(int yy = 0; yy < SPOT_SIZE; yy++)
@@ -207,7 +208,6 @@ void ComputeShaderTest::setSpot(const Vector2f& position, const Vector2f& v)
    glBindBuffer(GL_SHADER_STORAGE_BUFFER, velocitySSbo);
    Vector4f* velocity = (Vector4f*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, NUM_PARTICLES * sizeof(Vector4f), bufMask);
    //const Vector4f currentV(Ranf(-MAX_VELOCITY, MAX_VELOCITY), Ranf(-MAX_VELOCITY, MAX_VELOCITY), 0.0f, 0.0f);
-   const Vector4f currentV(v.x, v.y, 0.0f, 0.0f);
 #if 0
    velocity[i].x = Ranf(-0.01f, 0.01f);
    velocity[i].y = Ranf(-0.01f, 0.01f);
@@ -220,7 +220,12 @@ void ComputeShaderTest::setSpot(const Vector2f& position, const Vector2f& v)
          {
             int index = (yy + y - int(HALF_SPOT_SIZE)) * NUM_PARTICLES_X + xx + x - int(HALF_SPOT_SIZE);
             if(index > 0 && index < NUM_PARTICLES - 1)
-               velocity[(yy + y - int(HALF_SPOT_SIZE)) * NUM_PARTICLES_X + xx + x - int(HALF_SPOT_SIZE)] = currentV;
+            {
+               Vector4f& currentV = velocity[(yy + y - int(HALF_SPOT_SIZE)) * NUM_PARTICLES_X + xx + x - int(HALF_SPOT_SIZE)];
+
+               currentV.x = v.x;
+               currentV.y = v.y;
+            }
          }
       }
 #endif
@@ -234,11 +239,12 @@ void ComputeShaderTest::onTouchEvent(TouchEventType eventType, const Vector2f& p
 
    if(eventType == TE_MOVE || eventType == TE_DOWN)
    {
-      Vector2f v(p - mLastTouchPosition);
+      //Vector2f v(p - mLastTouchPosition);
+      Vector2f v(100.0f, 0.0f);
       float l = v.length();
       if(l > 0.000001)
       {
-         const int spotsCount = (int)std::max(2.0f, l / SPOT_SIZE) * 2;
+         /*const int spotsCount = (int)std::max(2.0f, l / SPOT_SIZE) * 2;
          
          Vector2f lastPosition = mLastTouchPosition;
          for(int i = 1; i < spotsCount; i++)
@@ -250,10 +256,10 @@ void ComputeShaderTest::onTouchEvent(TouchEventType eventType, const Vector2f& p
             currentV.x /= NUM_PARTICLES_X;
             currentV.y /= NUM_PARTICLES_Y;
 
-            setSpot(currentPosition, currentV);
+            setSpot(currentPosition, currentV * 1000.0f);
             lastPosition = currentPosition;
-         }
-         //setSpot(p, v);
+         }*/
+         setSpot(p, v);
       }
    }
    mLastTouchPosition = p;

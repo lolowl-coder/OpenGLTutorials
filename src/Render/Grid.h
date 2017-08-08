@@ -69,4 +69,5 @@ private:
    GridShader mShader;
    NormalShader mNormalShader;
    Vector2f mSize;
+   Buffer mEdges;
 };

@@ -35,7 +35,7 @@ enum TestType
 };
 
 Test* currentTest = NULL;
-TestType currentTestType = TT_COMPUTE_SHADER;
+TestType currentTestType = TT_CAMERA;
 bool lButtonPressed = false;
 
 TestType tests[TT_COUNT];
@@ -103,6 +103,15 @@ void sendKeyEvent(UINT uiMsg, WPARAM wParam)
    case VK_UP:
       {
          currentTestType = (TestType)((currentTestType + 1) % TT_COUNT);
+         changeTest(currentTestType);
+      }
+      break;
+   case VK_F1:
+      {
+         TestType tmp = currentTestType;
+         currentTestType = TT_COUNT;
+         changeTest(currentTestType);
+         currentTestType = tmp;
          changeTest(currentTestType);
       }
       break;

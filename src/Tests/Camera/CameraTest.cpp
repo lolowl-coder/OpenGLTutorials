@@ -37,7 +37,7 @@ void CameraTest::init()
 
    initWorldAxes();
 
-   const Vector2i dimensions(300, 300);
+   const Vector2i dimensions(100, 100);
    mGrid.setDimensions(dimensions);
    const Vector2f size(10.0f, 10.0f);
    mGrid.setSize(size);
