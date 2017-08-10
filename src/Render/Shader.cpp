@@ -126,6 +126,8 @@ bool Shader::load(const std::string& vsFileName, const std::string& fsFileName)
    std::string vsSrc;
    std::string fsSrc;
 
+   mName = vsFileName + ", " + fsFileName;
+
    std::ifstream vsFile(vsFileName.c_str());
 
    if(!vsFile.is_open())
@@ -177,6 +179,8 @@ bool Shader::load(const std::string& vsFileName, const std::string& fsFileName)
 bool Shader::load(const std::string& fileName, GLenum shaderType)
 {
    std::string src;
+
+   mName = fileName;
 
    std::ifstream f(fileName.c_str());
 
@@ -256,7 +260,7 @@ GLint Shader::uniformLocation(const std::string& name)
 
    if(result < 0)
    {
-      logMsg("Uniform %s not found", name.c_str());
+      logMsg("Uniform %s not found in shader %s", name.c_str(), mName.c_str());
    }
 
    checkGLError("Shader::uniformLocation");

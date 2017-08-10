@@ -10,6 +10,8 @@ void ShadowTest::init()
 {
    ICameraTest::init();
 
+   mShadowBuffer.init(mDirector.getViewSize());
+
    Light light(Vector3f(0.0f, 1.5f, 5.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 100.0f);
 
    mGround.setDimensions(Vector2i(10, 10));
@@ -39,6 +41,10 @@ void ShadowTest::deinit()
 
 void ShadowTest::run()
 {
+   mShadowBuffer.bind();
+   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+   mShadowBuffer.clear();
+
    ICameraTest::run();
 
    mGround.render(mCamera);
@@ -49,4 +55,8 @@ void ShadowTest::run()
    Matrix4f rotation = Matrix4f::createRotationAroundAxis(0.0f, t * 20.0f, 0.0f);
    mCube.setRotation(rotation);
    mCube.render(mCamera);
+
+   mShadowBuffer.unbind();
+   mShadowBuffer.bindTexture();
+
 }
