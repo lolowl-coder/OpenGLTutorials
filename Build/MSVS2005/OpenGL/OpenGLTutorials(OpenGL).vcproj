@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)/../../../src&quot;;&quot;$(ProjectDir)/../../../src/GL&quot;;&quot;$(ProjectDir)/../../../Lib/glew/include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/../../../src&quot;;&quot;$(ProjectDir)/../../../src/GL&quot;;&quot;$(ProjectDir)/../../../Lib/glew-2.1.0/include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="opengl32.lib glew32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)/../../../Lib/glew/lib/Release/Win32&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)/../../../Lib/glew-2.1.0/lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -301,11 +301,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\Render\Cube.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\Render\FBO.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\src\Render\Grid.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Render\Ground.cpp"
 					>
 				</File>
 				<File
@@ -330,6 +338,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\src\Render\Shader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Render\ShaderADSS.cpp"
 					>
 				</File>
 				<File
@@ -416,6 +428,14 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="Shadow"
+					>
+					<File
+						RelativePath="..\..\..\src\Tests\Shadow\ShadowTest.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -463,6 +483,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\Render\Cube.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\FBO.h"
 					>
 				</File>
@@ -472,6 +496,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\src\Render\Grid.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Render\Ground.h"
 					>
 				</File>
 				<File
@@ -500,6 +528,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\src\Render\Shader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Render\ShaderADSS.h"
 					>
 				</File>
 				<File
@@ -587,6 +619,14 @@
 					>
 					<File
 						RelativePath="..\..\..\src\Tests\Glow\GlowTest.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Shadow"
+					>
+					<File
+						RelativePath="..\..\..\src\Tests\Shadow\ShadowTest.h"
 						>
 					</File>
 				</Filter>

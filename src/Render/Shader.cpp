@@ -1,6 +1,7 @@
 #include "Platform/Log.h"
 #include "Render/RenderContext.h"
 #include "Render/Shader.h"
+#include "Platform/Log.h"
 
 Shader::Shader ()
 : mProgramId(0)
@@ -251,7 +252,16 @@ void Shader::bind()
 
 GLint Shader::uniformLocation(const std::string& name)
 {
-   return glGetUniformLocation(mProgramId, name.c_str());
+   GLint result = glGetUniformLocation(mProgramId, name.c_str());
+
+   if(result < 0)
+   {
+      logMsg("Uniform %s not found", name.c_str());
+   }
+
+   checkGLError("Shader::uniformLocation");
+
+   return result;
 }
 
 void Shader::uniform1(int location, const int count, const float* value)

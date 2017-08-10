@@ -116,6 +116,9 @@ void ComputeShaderTest::init()
    mDimensionsLocation = mComputeShader.uniformLocation("u_dimensions");
    mRenderShader.load("Data/Shader/ComputeShader/compute.vs", "Data/Shader/Common/colored.fs");
    mOriginLocation = mRenderShader.uniformLocation("u_origin");
+
+   glDisable(GL_CULL_FACE);
+   glDisable(GL_DEPTH_TEST);
 }
 
 void ComputeShaderTest::deinit()

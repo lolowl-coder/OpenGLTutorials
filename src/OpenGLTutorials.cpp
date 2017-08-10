@@ -16,6 +16,7 @@
 #include "Tests/Glow/GlowTest.h"
 #include "Tests/Instancing/InstancingTest.h"
 #include "Tests/ParticleSystem/ParticleSystemTest.h"
+#include "Tests/Shadow/ShadowTest.h"
 
 #include <string>
 #include <fstream>
@@ -31,11 +32,12 @@ enum TestType
    TT_CAMERA,
    TT_PARTICLE_SYSTEM,
    TT_IMAGE_PROCESSING,
+   TT_SHADOW,
    TT_COUNT
 };
 
 Test* currentTest = NULL;
-TestType currentTestType = TT_CAMERA;
+TestType currentTestType = TT_GLOW;
 bool lButtonPressed = false;
 
 TestType tests[TT_COUNT];
@@ -88,6 +90,11 @@ void changeTest(TestType& testType)
          currentTest = new ComputeShaders::ImageProcessingTest(director, "Image processing");
       }
       break;
+   case TT_SHADOW:
+      {
+         currentTest = new ShadowTest(director, "Shadow");
+      }
+      break;
    }
 
    if(currentTest)
@@ -103,6 +110,16 @@ void sendKeyEvent(UINT uiMsg, WPARAM wParam)
    case VK_UP:
       {
          currentTestType = (TestType)((currentTestType + 1) % TT_COUNT);
+         changeTest(currentTestType);
+      }
+      break;
+   case VK_DOWN:
+      {
+         currentTestType = (TestType)(currentTestType - 1);
+         if (currentTestType < 0)
+         {
+            currentTestType = (TestType)(TT_COUNT - 1);
+         }
          changeTest(currentTestType);
       }
       break;
@@ -283,9 +300,6 @@ int _tmain(int argc, _TCHAR* argv[])
    changeTest(currentTestType);
 
    glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
-
-   glEnable(GL_BLEND);
-   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	while ( !bDone )
 	{

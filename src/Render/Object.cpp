@@ -10,9 +10,14 @@ void Object::deinit()
 {
 }
 
-void Object::setTransform(const Matrix4f& transform)
+void Object::setTranslation(const Matrix4f& transform)
 {
-   mTransform = transform;
+   mTranslation = transform;
+}
+
+void Object::setRotation(const Matrix4f& rotation)
+{
+   mRotation = rotation;
 }
 
 void Object::setMaterial(const Material& material)

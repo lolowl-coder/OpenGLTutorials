@@ -15,14 +15,16 @@ public:
    virtual void deinit() = 0;
    virtual void render(const Camera& camera) = 0;
    
-   void setTransform(const Matrix4f& transform);
+   void setTranslation(const Matrix4f& transform);
+   void setRotation(const Matrix4f& rotation);
    void setMaterial(const Material& material);
    void setLight(const Light& light);
 
 protected:
    Material mMaterial;
    Light mLight;
-   Matrix4f mTransform;
+   Matrix4f mTranslation;
+   Matrix4f mRotation;
    GLuint mVBO;
    GLuint mIBO;
    Buffer mNormals;

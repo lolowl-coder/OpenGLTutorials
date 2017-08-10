@@ -2,81 +2,7 @@
 #include "Render/Grid.h"
 #include "Render/GLHeaders.h"
 #include "Render/RenderContext.h"
-
-GridShader::GridShader()
-: mMVPLocation(-1)
-, mMLocation(-1)
-, mEyeLocation(-1)
-, mMaterialAmbientLocation(-1)
-, mMaterialDiffuseLocation(-1)
-, mMaterialSpecularLocation(-1)
-, mMaterialShininessLocation(-1)
-, mLightAmbientLocation(-1)
-, mLightDiffuseLocation(-1)
-, mLightSpecularLocation(-1)
-, mLightAttenuationLocation(-1)
-, mLightPositionLocation(-1)
-{
-}
-
-void GridShader::setMVP(const Matrix4f& mvp)
-{
-   if(mMVPLocation == -1)
-      mMVPLocation = uniformLocation("uMVP");
-
-   uniformMatrix4(mMVPLocation, 1, &mvp);
-}
-
-void GridShader::setM(const Matrix4f& m)
-{
-   if(mMLocation == -1)
-      mMLocation = uniformLocation("uM");
-
-   uniformMatrix4(mMLocation, 1, &m);
-}
-
-void GridShader::setObjectMaterial(const Material& material)
-{
-   if(mMaterialAmbientLocation == -1)
-      mMaterialAmbientLocation = uniformLocation("objectMaterial.ambient");
-   uniform4(mMaterialDiffuseLocation, 1, &material.mAmbient);
-   if(mMaterialDiffuseLocation == -1)
-      mMaterialDiffuseLocation = uniformLocation("objectMaterial.diffuse");
-   uniform4(mMaterialDiffuseLocation, 1, &material.mDiffuse);
-   if(mMaterialSpecularLocation == -1)
-      mMaterialSpecularLocation = uniformLocation("objectMaterial.specular");
-   uniform4(mMaterialSpecularLocation, 1, &material.mSpecular);
-   if(mMaterialShininessLocation == -1)
-      mMaterialShininessLocation = uniformLocation("objectMaterial.shininess");
-   uniform1(mMaterialShininessLocation, 1, &material.mShininess);
-}
-
-void GridShader::setLight(const Light& light)
-{
-   if(mLightPositionLocation == -1)
-      mLightPositionLocation = uniformLocation("light.position");
-   uniform3(mLightPositionLocation, 1, &light.mPosition);
-   if(mLightAmbientLocation == -1)
-      mLightAmbientLocation = uniformLocation("light.ambient");
-   uniform4(mLightAmbientLocation, 1, &light.mAmbient);
-   if(mLightDiffuseLocation == -1)
-      mLightDiffuseLocation = uniformLocation("light.diffuse");
-   uniform4(mLightDiffuseLocation, 1, &light.mDiffuse);
-   if(mLightSpecularLocation == -1)
-      mLightSpecularLocation = uniformLocation("light.specular");
-   uniform4(mLightSpecularLocation, 1, &light.mSpecular);
-   if(mLightAttenuationLocation == -1)
-      mLightAttenuationLocation = uniformLocation("light.attenuation");
-   uniform1(mLightAttenuationLocation, 1, &light.mAttenuation);
-}
-
-void GridShader::setEye(const Vector3f& eye)
-{
-   if(mEyeLocation == -1)
-      mEyeLocation = uniformLocation("uEye");
-
-   uniform3(mEyeLocation, 1, &eye);
-}
+#include "Render/Vertex.h"
 
 NormalShader::NormalShader()
 : mColorLocation(-1)
@@ -100,12 +26,6 @@ void NormalShader::setMVP(const Matrix4f& mvp)
 
    uniformMatrix4(mMVPLocation, 1, &mvp);
 }
-
-struct Vertex
-{
-   Vector3f mPosition;
-   Vector3f mNormal;
-};
 
 Grid::Grid()
 : mEdges(GL_ARRAY_BUFFER, 0, 0)
@@ -305,13 +225,13 @@ Vector3f Grid::genVertex(const int row, const int col)
    float x = col / (float)mDimensions.x * mSize.x;
    float z = row / (float)mDimensions.y * mSize.y;
    float y = sin(Vector2f(x, z).length() * 5.0f) * 0.1f;
-   //float y = 0.0f;
+   
    return Vector3f(x, y, z);
 }
 
 void Grid::init()
 {
-   std::vector<Vertex> gridVertices;
+   std::vector<VertexP3N3> gridVertices;
    std::vector<GLuint> gridIndices;
    std::vector<Vector3f> gridNormals;
    std::vector<Vector3f> edges;
@@ -349,10 +269,8 @@ void Grid::init()
             }
          }
 
-         Vertex v;
+         VertexP3N3 v(genVertex(row, col), genNormal(row, col));
          
-         v.mPosition = genVertex(row, col);
-         v.mNormal = genNormal(row, col);
          gridVertices.push_back(v);
 
          gridNormals.push_back(v.mPosition);
@@ -369,7 +287,7 @@ void Grid::init()
    checkGLError("Gen grid vbo");
    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
    checkGLError("Bind grid vbo");
-   glBufferData(GL_ARRAY_BUFFER, gridVertices.size() * sizeof(Vertex), &gridVertices[0], GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, gridVertices.size() * sizeof(VertexP3N3), &gridVertices[0], GL_STATIC_DRAW);
    checkGLError("Pass grid vertices to GPU");
 
    glGenBuffers(1, &mIBO);
@@ -383,7 +301,7 @@ void Grid::init()
 
    mEdges.setData(edges.size() * sizeof(Vector3f), &edges[0]);
 
-   mShader.load("Data/Shader/Camera/grid.vs", "Data/Shader/Camera/grid.fs");
+   mShader.load();
    mNormalShader.load("Data/Shader/Camera/normal.vs", "Data/Shader/Camera/normal.fs");
 }
 
@@ -398,23 +316,12 @@ void Grid::deinit()
    mNormalShader.deinit();
 }
 
-void Grid::bindShader(const Camera& camera)
-{
-   mShader.bind();
-   Matrix4f v = camera.getV();
-   Matrix4f mvp = camera.getP() * v * mTransform;
-   mShader.setMVP(mvp);
-   mShader.setM(mTransform);
-   mShader.setObjectMaterial(mMaterial);
-   mShader.setLight(mLight);
-   mShader.setEye(camera.getPosition());
-}
-
 void Grid::render(const Camera& camera)
 {
-   bindShader(camera);
+   mShader.bind(camera, mTranslation, mRotation, mMaterial, mLight);
 
    glEnable(GL_DEPTH_TEST);
+   checkGLError("Grid::render - enable depth test");
 
    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
    checkGLError("Bind grid vbo");
@@ -424,15 +331,15 @@ void Grid::render(const Camera& camera)
 
    glEnableVertexAttribArray(0);
    checkGLError("Enable vertex attrib array");
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexP3N3), 0);
    checkGLError("Set vertex attrib pointer");
 
    glEnableVertexAttribArray(1);
    checkGLError("Enable normal attrib array");
-   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::mNormal));
+   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexP3N3), (void*)offsetof(VertexP3N3, VertexP3N3::mNormal));
    checkGLError("Set normal attrib pointer");
 
-   glCullFace(GL_FRONT_AND_BACK);
+   glCullFace(GL_BACK);
 
    int indicesCount =
       (mDimensions.y - 1) * 2 * mDimensions.x   //points count for each stripe(stripes count = GRID_SIZE - 1)

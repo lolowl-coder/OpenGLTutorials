@@ -66,6 +66,10 @@ void BlendEquationTest::init()
    mFBO.init(Vector2i(viewSize));
    mRenderShader.init();
    mFBOShader.init();
+
+   glDisable(GL_DEPTH_TEST);
+   glDisable(GL_CULL_FACE);
+   glEnable(GL_BLEND);
 }
 
 void BlendEquationTest::deinit()
@@ -95,7 +99,6 @@ void BlendEquationTest::renderQuad(RenderShader* shader, const Vector3f& offset,
 
 void BlendEquationTest::run()
 {
-   glDisable(GL_DEPTH_TEST);
    checkGLError("BlendEquationTest::run, disable depth test");
 
    mFBO.bind();

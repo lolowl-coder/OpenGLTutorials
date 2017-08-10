@@ -48,6 +48,10 @@ void CameraTest::init()
    mGrid.setLight(light);
 
    mAxesShader.load("Data/Shader/Camera/axes.vs", "Data/Shader/Common/colored.fs");
+
+   glEnable(GL_DEPTH_TEST);
+   glEnable(GL_CULL_FACE);
+   glCullFace(GL_BACK);
 }
 
 void CameraTest::deinit()

@@ -21,6 +21,9 @@ namespace ComputeShaders
    void ImageProcessingShader::init()
    {
       load("Data/Shader/ComputeShader/imageProcessing.cs", GL_COMPUTE_SHADER);
+
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    }
 
    RenderShader::RenderShader()
@@ -221,9 +224,6 @@ namespace ComputeShaders
       mFlatImageData.setData(flatImagesSizeInBytes, flatImageData);
 
       delete [] flatImageData;
-
-      glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    }
 
    void ImageProcessingTest::initDstTexture()

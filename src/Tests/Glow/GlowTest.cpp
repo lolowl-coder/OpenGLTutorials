@@ -108,6 +108,9 @@ void GlowTest::init()
 
    mHBlurFBO.init(viewSize);
    mVBlurFBO.init(viewSize);
+
+   glDisable(GL_CULL_FACE);
+   glDisable(GL_DEPTH_TEST);
 }
 
 void GlowTest::deinit()
@@ -142,9 +145,9 @@ void GlowTest::renderCheckerBackground()
 void GlowTest::run()
 {
    FBO::unbind();
-   renderCheckerBackground();
 
    glDisable(GL_BLEND);
+   renderCheckerBackground();
 
    mMainObjectFBO.bind();
    glClearColor(0.0, 0.0, 0.0, 0.0);

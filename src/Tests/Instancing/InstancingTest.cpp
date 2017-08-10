@@ -62,6 +62,9 @@ void InstancingTest::init()
    const int checkerSize = 16;
    mTexture.genChecker(checkerColor0, checkerColor1, checkerSize);
    mTexture.create();
+
+   glDisable(GL_CULL_FACE);
+   glDisable(GL_DEPTH_TEST);
 }
 
 void InstancingTest::deinit()
