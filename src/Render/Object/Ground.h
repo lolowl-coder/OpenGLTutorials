@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Render/Grid.h"
+#include "Render/Object/Grid.h"
 
 class Ground : public Grid
 {

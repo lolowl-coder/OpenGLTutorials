@@ -3,11 +3,11 @@
 precision mediump float;
 
 uniform vec4 uColor;
+uniform sampler2D uTexture;
 
 in vec2 vUv;
 
 out vec4 color;
-uniform sampler2D uTexture;
 
 void main (void)
 {

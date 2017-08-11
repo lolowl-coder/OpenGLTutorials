@@ -2,14 +2,14 @@
 
 #include "Tests/Test.h"
 #include "Render/Camera.h"
-#include "Render/ParticleSystem.h"
+#include "Render/Object/ParticleSystem.h"
 
 #define CHARS_COUNT 256
 
 class ParticleSystemTest : public Test
 {
 public:
-   ParticleSystemTest(const Director& director, const std::string& name);
+   ParticleSystemTest(Director& director, const std::string& name);
 
    virtual void init();
    virtual void deinit();

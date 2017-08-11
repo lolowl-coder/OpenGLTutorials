@@ -1,7 +1,7 @@
 #include "Render/RenderContext.h"
 #include "Tests/ParticleSystem/ParticleSystemTest.h"
 
-ParticleSystemTest::ParticleSystemTest(const Director& director, const std::string& name)
+ParticleSystemTest::ParticleSystemTest(Director& director, const std::string& name)
 : Test(director, name)
 , mEmitter(NULL)
 , mCamera(director)

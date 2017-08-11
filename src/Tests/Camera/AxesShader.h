@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Render/Shader.h"
+#include "Render/Shader/Shader.h"
 
 class AxesShader : public Shader
 {

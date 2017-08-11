@@ -23,7 +23,7 @@ static Vector2f texCoords[] = {
 
 Vector3f positions[R_COUNT];
 
-InstancingTest::InstancingTest(const Director& director, const std::string& name)
+InstancingTest::InstancingTest(Director& director, const std::string& name)
 :Test(director, name)
 {
 

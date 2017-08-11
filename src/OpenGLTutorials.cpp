@@ -37,7 +37,7 @@ enum TestType
 };
 
 Test* currentTest = NULL;
-TestType currentTestType = TT_GLOW;
+TestType currentTestType = TT_SHADOW;
 bool lButtonPressed = false;
 
 TestType tests[TT_COUNT];
@@ -287,6 +287,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
    rc.init ( &windowHandle );
 
+   director.init();
+
    bool textureBufferSupported =
       rc.isExtensionSupported("GL_EXT_texture_buffer_object") ||
       rc.isExtensionSupported("GL_EXT_texture_buffer");
@@ -353,6 +355,8 @@ int _tmain(int argc, _TCHAR* argv[])
    {
       currentTest->deinit();
    }
+
+   director.deinit();
 
    rc.destroySurface ();
    rc.destroy ();

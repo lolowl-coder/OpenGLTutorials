@@ -29,7 +29,7 @@ static Vector3f vertices[] = {
    Vector3f (  0.5f,  0.5f, 0.0f )
 };
 
-ComputeShaderTest::ComputeShaderTest(const Director& director, const std::string& name)
+ComputeShaderTest::ComputeShaderTest(Director& director, const std::string& name)
 : Test(director, name)
 , mFrameId(0)
 , mFrameIdLocation(-1)

@@ -2,12 +2,12 @@
 
 #include "Render/GLHeaders.h"
 #include "Tests/Test.h"
-#include "Render/TexturedShader.h"
+#include "Render/Shader/TexturedShader.h"
 
 class ComputeShaderTest : public Test
 {
 public:
-   ComputeShaderTest(const Director& director, const std::string& name);
+   ComputeShaderTest(Director& director, const std::string& name);
 
    virtual void init();
    virtual void deinit();

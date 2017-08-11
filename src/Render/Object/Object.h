@@ -4,7 +4,7 @@
 #include "Render/Buffer.h"
 #include "Render/Light.h"
 #include "Render/Material.h"
-#include "Render/Shader.h"
+#include "Render/Shader/Shader.h"
 
 class Object
 {
@@ -16,9 +16,13 @@ public:
    virtual void render(const Camera& camera) = 0;
    
    void setTranslation(const Matrix4f& transform);
+   Matrix4f getTranslation() const;
    void setRotation(const Matrix4f& rotation);
+   Matrix4f getRotation() const;
    void setMaterial(const Material& material);
+   Material getMaterial() const;
    void setLight(const Light& light);
+   Light getLight() const;
 
 protected:
    Material mMaterial;

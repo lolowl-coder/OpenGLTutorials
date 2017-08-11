@@ -4,7 +4,7 @@
 
 #include <vector>
 
-CameraTest::CameraTest(const Director& director, const std::string& name)
+CameraTest::CameraTest(Director& director, const std::string& name)
 : ICameraTest(director, name)
 {
 

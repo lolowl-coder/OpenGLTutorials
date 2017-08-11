@@ -4,7 +4,7 @@
 
 #include <vector>
 
-ICameraTest::ICameraTest(const Director& director, const std::string& name)
+ICameraTest::ICameraTest(Director& director, const std::string& name)
 : Test(director, name)
 , mCamera(director)
 , mTime(0.0f)

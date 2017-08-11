@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Render/TexturedShader.h"
+#include "Render/Shader/TexturedShader.h"
 #include "Tests/Test.h"
 #include "Render/Texture.h"
 
 class InstancingTest : public Test
 {
 public:
-   InstancingTest(const Director& director, const std::string& name);
+   InstancingTest(Director& director, const std::string& name);
 
    virtual void init();
    virtual void deinit();

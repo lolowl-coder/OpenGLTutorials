@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Render/Object.h"
-#include "Render/ShaderADSS.h"
+#include "Render/Object/Object.h"
+#include "Render/Shader/ShaderADSS.h"
 
 class Cube : public Object
 {
@@ -14,5 +14,4 @@ public:
 
 private:
    Buffer mVertices;
-   ShaderADSS mShader;
 };

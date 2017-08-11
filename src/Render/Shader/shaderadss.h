@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Render/Shader.h"
+#include "Render/Shader/Shader.h"
 #include "Render/Camera.h"
 #include "Render/Material.h"
 #include "Render/Light.h"
@@ -13,18 +13,17 @@ public:
    ShaderADSS();
 
    void load();
-   void bind(const Camera& camera, const Matrix4f& translation, const Matrix4f& rotation, const Material& material, const Light& light);
-   void setMVP(const Matrix4f& mvp);
    void setM(const Matrix4f& m);
-   void setRotation(const Matrix4f& m);
+   void setV(const Matrix4f& v);
+   void setP(const Matrix4f& p);
    void setObjectMaterial(const Material& material);
    void setLight(const Light& light);
    void setEye(const Vector3f& eye);
 
 private:
-   GLint mMVPLocation;
    GLint mMLocation;
-   GLint mRotationLocation;
+   GLint mVLocation;
+   GLint mPLocation;
    GLint mEyeLocation;
    GLint mMaterialAmbientLocation;
    GLint mMaterialDiffuseLocation;

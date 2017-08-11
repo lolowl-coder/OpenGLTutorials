@@ -10,6 +10,16 @@ Director::Director()
 
 }
 
+void Director::init()
+{
+   mRectRenderer.init();
+}
+
+void Director::deinit()
+{
+   mRectRenderer.deinit();
+}
+
 void Director::update()
 {
    mFrame++;
@@ -53,4 +63,9 @@ std::string Director::getAppName()
 void Director::setAppName(const std::string& name)
 {
    mAppName = name;
+}
+
+RectRenderer& Director::getRectRenderer()
+{
+   return mRectRenderer;
 }

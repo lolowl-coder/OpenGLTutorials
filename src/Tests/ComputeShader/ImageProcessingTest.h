@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Render/ShaderStorageBuffer.h"
-#include "Render/Shader.h"
+#include "Render/Shader/Shader.h"
 #include "Render/Texture.h"
 #include "Tests/Test.h"
 
@@ -54,7 +54,7 @@ namespace ComputeShaders
    class ImageProcessingTest : public Test
    {
    public:
-      ImageProcessingTest(const Director& director, const std::string& name);
+      ImageProcessingTest(Director& director, const std::string& name);
 
       virtual void init();
       virtual void deinit();

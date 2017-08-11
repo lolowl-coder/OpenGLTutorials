@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Director.h"
-#include "Render/Shader.h"
+#include "Render/Shader/Shader.h"
 
 #include "vmath.h"
 
@@ -15,7 +15,7 @@ public:
    };
 
 public:
-   Camera(const Director& director);
+   Camera(Director& director);
 
    void update();
    void updatePosition();

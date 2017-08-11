@@ -79,7 +79,7 @@ void CheckerShader::setUniforms(const int textureUnit, const Vector3f& offset, c
    uniform2(mTileLocation, 1, &tile);
 }
 
-GlowTest::GlowTest(const Director& director, const std::string& name)
+GlowTest::GlowTest(Director& director, const std::string& name)
 : Test(director, name)
 , mQuad(GL_ARRAY_BUFFER, 0, 0)
 {
@@ -100,14 +100,14 @@ void GlowTest::init()
    mMainObjectShader.init();
    mBlurShader.init();
    Vector2f viewSize = mDirector.getViewSize();
-   mMainObjectFBO.init(viewSize);
+   mMainObjectFBO.init(viewSize, false);
    mMainObjectFBO.unbind();
    mCheckerShader.init();
    mCheckerTexture.genChecker(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(0.0f, 0.0f, 0.0f), 32);
    mCheckerTexture.create();
 
-   mHBlurFBO.init(viewSize);
-   mVBlurFBO.init(viewSize);
+   mHBlurFBO.init(viewSize, false);
+   mVBlurFBO.init(viewSize, false);
 
    glDisable(GL_CULL_FACE);
    glDisable(GL_DEPTH_TEST);
@@ -167,7 +167,7 @@ void GlowTest::run()
    glClear(GL_COLOR_BUFFER_BIT);
    Vector2f step(1.0f / viewSize.x * 1.0, 0.0f);
    mBlurShader.setUniforms(0, step, blurRadius);
-   mMainObjectFBO.bindTexture();
+   mMainObjectFBO.bindColorTexture();
    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
    //v-blur
@@ -177,7 +177,7 @@ void GlowTest::run()
    step.x = 0.0f;
    step.y = 1.0f / viewSize.y * 1.0f;
    mBlurShader.setUniforms(0, step, blurRadius);
-   mHBlurFBO.bindTexture();
+   mHBlurFBO.bindColorTexture();
    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
    
    FBO::unbind();
@@ -188,6 +188,6 @@ void GlowTest::run()
    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    mCheckerShader.bind();
    mCheckerShader.setUniforms(0, Vector3f(-0.5f, -0.5f, 0.0f), Vector4f(1.0f, 1.0f, 1.0f, 1.0f), Vector3f(2.0f, 2.0f, 1.0f), Vector2f(1.0f, 1.0f));
-   mVBlurFBO.bindTexture();
+   mVBlurFBO.bindColorTexture();
    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }

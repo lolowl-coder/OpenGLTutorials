@@ -301,19 +301,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Render\Cube.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\src\Render\FBO.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\Render\Grid.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\Render\Ground.cpp"
 					>
 				</File>
 				<File
@@ -325,23 +313,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Render\Object.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\Render\ParticleSystem.cpp"
+					RelativePath="..\..\..\src\Render\RectRenderer.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\src\Render\RenderContextBase.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\Render\Shader.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\Render\ShaderADSS.cpp"
 					>
 				</File>
 				<File
@@ -353,13 +329,57 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Render\TexturedShader.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\src\Render\Win32GLRenderContext.cpp"
 					>
 				</File>
+				<Filter
+					Name="Shader"
+					>
+					<File
+						RelativePath="..\..\..\src\Render\Shader\RectShader.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Shader\Shader.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Shader\ShaderADSS.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Shader\TexturedRectShader.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Shader\TexturedShader.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Object"
+					>
+					<File
+						RelativePath="..\..\..\src\Render\Object\Cube.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Object\Grid.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Object\Ground.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Object\Object.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Object\ParticleSystem.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Tests"
@@ -483,23 +503,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Render\Cube.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\src\FBO.h"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\src\Render\GLHeaders.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\Render\Grid.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\Render\Ground.h"
 					>
 				</File>
 				<File
@@ -511,11 +519,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Render\Object.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\Render\ParticleSystem.h"
+					RelativePath="..\..\..\src\Render\RectRenderer.h"
 					>
 				</File>
 				<File
@@ -527,19 +531,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Render\Shader.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\Render\ShaderADSS.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\src\Render\ShaderStorageBuffer.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\Render\Sphere.h"
 					>
 				</File>
 				<File
@@ -547,13 +539,61 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Render\TexturedShader.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\src\Render\Win32GLRenderContext.h"
 					>
 				</File>
+				<Filter
+					Name="Shader"
+					>
+					<File
+						RelativePath="..\..\..\src\Render\Shader\RectShader.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Shader.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\ShaderADSS.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Shader\TexturedRectShader.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Shader\TexturedShader.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Object"
+					>
+					<File
+						RelativePath="..\..\..\src\Render\Object\Cube.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Object\Grid.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Object\Ground.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Object\Object.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Object\ParticleSystem.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\Render\Object\Sphere.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Tests"

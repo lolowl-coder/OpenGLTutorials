@@ -53,7 +53,7 @@ namespace ComputeShaders
       uniform1i(mTextureUnitLocation, 1, &textureUnit);
    }
 
-   ImageProcessingTest::ImageProcessingTest(const Director& director, const std::string& name)
+   ImageProcessingTest::ImageProcessingTest(Director& director, const std::string& name)
    : Test(director, name)
    , mQuad(GL_ARRAY_BUFFER, 0, 0)
    , mImageInfos(0, 0, 0)

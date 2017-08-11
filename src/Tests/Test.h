@@ -10,7 +10,7 @@
 class Test
 {
 public:
-   Test(const Director& director, const std::string& name);
+   Test(Director& director, const std::string& name);
    virtual void init() = 0;
    virtual void deinit() = 0;
    virtual void run() = 0;
@@ -18,6 +18,6 @@ public:
    virtual void onKeyboardEvent(KeyboardEventType eventType, int keyCode);
 
 protected:
-   const Director& mDirector;
+   Director& mDirector;
    std::string mName;
 };

@@ -8,14 +8,19 @@ class FBO
 public:
    FBO();
 
-   bool init(const Vector2i& size);
+   bool init(const Vector2i& size, bool depth);
    void deinit();
    void bind();
-   void bindTexture();
+   void bindColorTexture();
+   void bindDepthTexture();
    static void unbind();
    void clear();
 
 private:
+   GLuint attachTexture(bool depth, GLenum attachment, const Vector2i& size);
+
+private:
    GLuint mId;
-   GLuint mRT;
+   GLuint mColorTexture;
+   GLuint mDepthTexture;
 };

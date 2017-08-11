@@ -1,6 +1,6 @@
 #include "Render/Camera.h"
 
-Camera::Camera(const Director& director)
+Camera::Camera(Director& director)
 : mDirector(director)
 , mProjectionType(P_PERSPECTIVE)
 , mPosition(0.0f, 0.0f, 0.0f)
@@ -28,7 +28,7 @@ void Camera::update()
    {
    case P_ORTHO:
       {
-         mP = Matrix4f::createOrtho(-1.0f, 1.0f, -1.0f, 1.0f, -10.0f, 10.f);
+         mP = Matrix4f::createOrtho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 10.0f);
       }
       break;
    case P_PERSPECTIVE:

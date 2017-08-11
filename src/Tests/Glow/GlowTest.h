@@ -4,8 +4,8 @@
 #include "Render/Buffer.h"
 #include "Render/FBO.h"
 #include "Render/Texture.h"
-#include "Render/TexturedShader.h"
-#include "Render/Shader.h"
+#include "Render/Shader/TexturedShader.h"
+#include "Render/Shader/Shader.h"
 
 class TransformedQuadShader : public Shader
 {
@@ -54,7 +54,7 @@ private:
 class GlowTest : public Test
 {
 public:
-   GlowTest(const Director& director, const std::string& name);
+   GlowTest(Director& director, const std::string& name);
 
    virtual void init();
    virtual void deinit();

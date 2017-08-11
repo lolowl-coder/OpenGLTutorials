@@ -2,14 +2,46 @@
 #include "Render/RenderContext.h"
 #include "Render/FBO.h"
 
+#include <vector>
+
 FBO::FBO()
 : mId(0)
-, mRT(0)
+, mColorTexture(0)
+, mDepthTexture(0)
 {
 
 }
 
-bool FBO::init(const Vector2i& size)
+GLuint FBO::attachTexture(bool depth, GLenum attachment, const Vector2i& size)
+{
+   GLuint texture = 0;
+
+   glGenTextures(1, &texture);
+   glBindTexture(GL_TEXTURE_2D, texture);
+
+   GLint internalFormat = GL_RGBA;
+   GLenum format = GL_RGBA;
+   if(depth)
+   {
+      internalFormat = GL_DEPTH_COMPONENT24;
+      format = GL_DEPTH_COMPONENT;
+   }
+   
+   glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, size.x, size.y, 0, format, GL_UNSIGNED_BYTE, 0);
+   checkGLError("FBO::attachTexture, can't create fbo texture");
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+   checkGLError("FBO::attachTexture, can't set texture parameters");
+
+   glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture, 0);
+   checkGLError("FBO::attachTexture, can't attach fbo texture");
+
+   return texture;
+}
+
+bool FBO::init(const Vector2i& size, bool depth)
 {
    mId = 0;
    glGenFramebuffers(1, &mId);
@@ -17,20 +49,18 @@ bool FBO::init(const Vector2i& size)
 
    checkGLError("FBO::init, bind fbo");
 
-   glGenTextures(1, &mRT);
-   glBindTexture(GL_TEXTURE_2D, mRT);
-   glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, size.x, size.y, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+   std::vector<GLenum> drawBuffers;
+   drawBuffers.push_back(GL_COLOR_ATTACHMENT0);
+   mColorTexture = attachTexture(false, drawBuffers.back(), size);
+
+   if(depth)
+   {
+      drawBuffers.push_back(GL_DEPTH_ATTACHMENT);
+      mDepthTexture = attachTexture(true, drawBuffers.back(), size);
+   }
+
    
-   checkGLError("FBO::init, create rt");
-
-   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mRT, 0);
-
-   GLenum drawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-   glDrawBuffers(1, drawBuffers);
+   glDrawBuffers(1, &drawBuffers[0]);
 
    checkGLError("FBO::init, set draw buffers");
 
@@ -46,7 +76,7 @@ bool FBO::init(const Vector2i& size)
 
 void FBO::deinit()
 {
-   glDeleteTextures(1, &mRT);
+   glDeleteTextures(1, &mColorTexture);
    unbind();
    glDeleteFramebuffers(1, &mId);
 }
@@ -56,9 +86,14 @@ void FBO::bind()
    glBindFramebuffer(GL_FRAMEBUFFER, mId);
 }
 
-void FBO::bindTexture()
+void FBO::bindColorTexture()
 {
-   glBindTexture(GL_TEXTURE_2D, mRT);
+   glBindTexture(GL_TEXTURE_2D, mColorTexture);
+}
+
+void FBO::bindDepthTexture()
+{
+   glBindTexture(GL_TEXTURE_2D, mDepthTexture);
 }
 
 void FBO::unbind()
@@ -68,5 +103,11 @@ void FBO::unbind()
 
 void FBO::clear()
 {
-   glClear(GL_COLOR_BUFFER_BIT);
+   GLenum mask = GL_COLOR_BUFFER_BIT;
+   if(mDepthTexture != 0)
+   {
+      mask |= GL_DEPTH_BUFFER_BIT;
+   }
+
+   glClear(mask);
 }

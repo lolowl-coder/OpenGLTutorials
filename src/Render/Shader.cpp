@@ -1,6 +1,6 @@
 #include "Platform/Log.h"
 #include "Render/RenderContext.h"
-#include "Render/Shader.h"
+#include "Render/Shader/Shader.h"
 #include "Platform/Log.h"
 
 Shader::Shader ()

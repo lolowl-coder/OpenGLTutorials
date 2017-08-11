@@ -1,9 +1,9 @@
-#include "Render/ShaderADSS.h"
+#include "Render/Shader/ShaderADSS.h"
 
 ShaderADSS::ShaderADSS()
-: mMVPLocation(-1)
-, mMLocation(-1)
-, mRotationLocation(-1)
+: mMLocation(-1)
+, mVLocation(-1)
+, mPLocation(-1)
 , mEyeLocation(-1)
 , mMaterialAmbientLocation(-1)
 , mMaterialDiffuseLocation(-1)
@@ -19,30 +19,7 @@ ShaderADSS::ShaderADSS()
 
 void ShaderADSS::load()
 {
-   Shader::load("Data/Shader/Camera/grid.vs", "Data/Shader/Camera/grid.fs");
-}
-
-void ShaderADSS::bind(const Camera& camera, const Matrix4f& translation, const Matrix4f& rotation, const Material& material, const Light& light)
-{
-   Shader::bind();
-
-   Matrix4f transform = translation * rotation;
-   Matrix4f v = camera.getV();
-   Matrix4f mvp = camera.getP() * v * transform;
-   setMVP(mvp);
-   setM(transform);
-   setRotation(rotation);
-   setObjectMaterial(material);
-   setLight(light);
-   setEye(camera.getPosition());
-}
-
-void ShaderADSS::setMVP(const Matrix4f& mvp)
-{
-   if(mMVPLocation == -1)
-      mMVPLocation = uniformLocation("uMVP");
-
-   uniformMatrix4(mMVPLocation, 1, &mvp);
+   Shader::load("Data/Shader/Lighting/ADSSS.vs", "Data/Shader/Lighting/ADSSS.fs");
 }
 
 void ShaderADSS::setM(const Matrix4f& m)
@@ -53,12 +30,20 @@ void ShaderADSS::setM(const Matrix4f& m)
    uniformMatrix4(mMLocation, 1, &m);
 }
 
-void ShaderADSS::setRotation(const Matrix4f& rotation)
+void ShaderADSS::setV(const Matrix4f& v)
 {
-   if(mRotationLocation == -1)
-      mRotationLocation = uniformLocation("uRotation");
+   if(mVLocation == -1)
+      mVLocation = uniformLocation("uV");
 
-   uniformMatrix4(mRotationLocation, 1, &rotation);
+   uniformMatrix4(mVLocation, 1, &v);
+}
+
+void ShaderADSS::setP(const Matrix4f& p)
+{
+   if(mPLocation == -1)
+      mPLocation = uniformLocation("uP");
+
+   uniformMatrix4(mPLocation, 1, &p);
 }
 
 void ShaderADSS::setObjectMaterial(const Material& material)

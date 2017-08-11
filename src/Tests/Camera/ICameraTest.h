@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Render/Camera.h"
-#include "Render/Grid.h"
-#include "Render/Shader.h"
+#include "Render/Object/Grid.h"
+#include "Render/Shader/Shader.h"
 #include "Tests/Test.h"
 
 #define CHARS_COUNT 256
@@ -10,7 +10,7 @@
 class ICameraTest : public Test
 {
 public:
-   ICameraTest(const Director& director, const std::string& name);
+   ICameraTest(Director& director, const std::string& name);
    virtual void init();
    virtual void run();
    virtual void onTouchEvent(TouchEventType eventType, const Vector2f& position);

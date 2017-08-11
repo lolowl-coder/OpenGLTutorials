@@ -1,7 +1,7 @@
 #include "Platform/Log.h"
 #include "Test.h"
 
-Test::Test(const Director& director, const std::string& name)
+Test::Test(Director& director, const std::string& name)
 : mDirector(director)
 , mName(name)
 {
