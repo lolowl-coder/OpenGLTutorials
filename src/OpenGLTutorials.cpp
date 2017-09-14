@@ -327,7 +327,7 @@ int _tmain(int argc, _TCHAR* argv[])
       framesCount++;
       currentTime = t;
       director.setTimeDelta((float)timeDelta);
-      director.setTime((float)t);
+      director.setTime(director.getTime() + (float)timeDelta);
 
       if(fpsUpdateTime > 1.0)
       {

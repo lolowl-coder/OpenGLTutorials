@@ -14,6 +14,7 @@ ShaderADSS::ShaderADSS()
 , mLightSpecularLocation(-1)
 , mLightAttenuationLocation(-1)
 , mLightPositionLocation(-1)
+, mLightSpaceMatrixLocation(-1)
 {
 }
 
@@ -79,6 +80,13 @@ void ShaderADSS::setLight(const Light& light)
    if(mLightAttenuationLocation == -1)
       mLightAttenuationLocation = uniformLocation("light.attenuation");
    uniform1(mLightAttenuationLocation, 1, &light.mAttenuation);
+}
+
+void ShaderADSS::setLightSpaceMatrix(const Matrix4f& lightSpaceMatrix)
+{
+   if(mLightSpaceMatrixLocation == -1)
+      mLightSpaceMatrixLocation = uniformLocation("uLightSpaceMatrix");
+   uniformMatrix4(mLightSpaceMatrixLocation, 1, &lightSpaceMatrix);
 }
 
 void ShaderADSS::setEye(const Vector3f& eye)

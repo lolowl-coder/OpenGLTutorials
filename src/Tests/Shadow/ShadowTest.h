@@ -33,5 +33,5 @@ private:
    TexturedRectShader mFboShader;
    Light mLight;
    bool mRenderShadowBuffer;
-   bool mRenderDepth;
+   Camera mLightCamera;
 };

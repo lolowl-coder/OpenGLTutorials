@@ -18,6 +18,7 @@ public:
    void setP(const Matrix4f& p);
    void setObjectMaterial(const Material& material);
    void setLight(const Light& light);
+   void setLightSpaceMatrix(const Matrix4f& lightSpaceMatrix);
    void setEye(const Vector3f& eye);
 
 private:
@@ -34,4 +35,5 @@ private:
    GLint mLightSpecularLocation;
    GLint mLightAttenuationLocation;
    GLint mLightPositionLocation;
+   GLint mLightSpaceMatrixLocation;
 };

@@ -17,7 +17,7 @@ out vec4 vPosLightSpace;
 void main(void)
 {
    vPosition = (uM * vec4(aPosition, 1.0)).xyz;
-   mat3 rotation = transpose(inverse(mat3(uM)));
+   mat3 rotation = mat3(uM);
    vNormal = rotation * aNormal;
    vPosLightSpace = uLightSpaceMatrix * vec4(vPosition, 1.0);
    

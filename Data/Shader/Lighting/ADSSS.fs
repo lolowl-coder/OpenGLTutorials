@@ -33,15 +33,35 @@ in vec4 vPosLightSpace;
 
 out vec4 color;
 
-float calcShadow()
+float calcShadow(vec3 normal, vec3 lightDir)
 {
 	vec3 projCoords = vPosLightSpace.xyz / vPosLightSpace.w;
 	projCoords = projCoords * 0.5 + 0.5;
-	float closestDepth = texture(s_shadowMap, projCoords.xy).r;
-	float currentDepth = projCoords.z;
-	float shadow = currentDepth > closestDepth ? 1.0 : 0.0;
 	
-	return closestDepth;
+	//float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+	float bias = 0.0005;
+	float currentDepth = projCoords.z;
+	
+	#if 0
+		float closestDepth = texture(s_shadowMap, projCoords.xy).r;
+	
+		float shadow = currentDepth - bias > closestDepth ? 0.0 : 1.0;
+	#else
+		float shadow = 0.0;
+		vec2 texelSize = 1.0 / vec2(textureSize(s_shadowMap, 0));
+		for(int x = -1; x <= 1; ++x)
+		{
+			for(int y = -1; y <= 1; ++y)
+			{
+				float pcfDepth = texture(s_shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+				shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+			}    
+		}
+		shadow /= 9.0;
+		shadow = 1.0 - shadow;
+	#endif
+	
+	return shadow;
 }
 
 void main (void)
@@ -65,7 +85,7 @@ void main (void)
    float distToLight = length(lightDir);
    float attenuation = 1.0 - min(1.0, distToLight / light.attenuation);
    
-   float shadow = calcShadow();
+   float shadow = calcShadow(normal, lightDir);
    
    color = ambientColor + (diffuseColor + specularColor) * attenuation * shadow;
 }
