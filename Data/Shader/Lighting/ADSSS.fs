@@ -4,6 +4,7 @@ precision mediump float;
 
 uniform vec4 uDiffuse;
 uniform vec3 uEye;
+uniform vec3 uLightDir;
 
 struct ObjectMaterial
 {
@@ -38,14 +39,33 @@ float calcShadow(vec3 normal, vec3 lightDir)
 	vec3 projCoords = vPosLightSpace.xyz / vPosLightSpace.w;
 	projCoords = projCoords * 0.5 + 0.5;
 	
-	//float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
-	float bias = 0.0005;
+	/*if(projCoords.z > 1.0)
+	{
+		return 0.0;
+	}*/
+	
+	float dotProduct = dot(normal, lightDir);
+	
+	/*if(dotProduct < 0.0)
+	{
+		return 1.0;
+	}*/
+	
+   /*if(abs(dotProduct) < 0.1)
+      return 1.0;*/
+   
+	//float bias = max(0.00001 * (1.0 - dotProduct), 0.000001);
+	float bias = 0.0;
 	float currentDepth = projCoords.z;
 	
-	#if 0
+	#if 1
 		float closestDepth = texture(s_shadowMap, projCoords.xy).r;
 	
 		float shadow = currentDepth - bias > closestDepth ? 0.0 : 1.0;
+      //shadow *= smoothstep(0.9, 1.0, abs(dotProduct));
+      //float d = (currentDepth - bias) - closestDepth;
+      //float shadow = float(d < 0.0);
+      //float shadow = clamp(-d * 2000.0, 0.0, 1.0);
 	#else
 		float shadow = 0.0;
 		vec2 texelSize = 1.0 / vec2(textureSize(s_shadowMap, 0));

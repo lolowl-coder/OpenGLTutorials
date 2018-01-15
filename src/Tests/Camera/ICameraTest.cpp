@@ -6,7 +6,6 @@
 
 ICameraTest::ICameraTest(Director& director, const std::string& name)
 : Test(director, name)
-, mCamera(director)
 , mTime(0.0f)
 {
 
@@ -18,13 +17,6 @@ void ICameraTest::init()
    {
       mKeyState[i] = false;
    }
-
-   Vector3f cameraPosition(4.0f, 1.8f, 4.0f);
-   mCamera.setPosition(cameraPosition);
-   mCamera.setLookAt(cameraPosition - Vector3f(1.0f, 0.0f, 1.0f));
-   mCamera.setFOV(180.0f);
-   mCamera.setProjectionType(Camera::P_PERSPECTIVE);
-   mCamera.update();
 }
 
 void ICameraTest::updateCamera()
@@ -55,8 +47,9 @@ void ICameraTest::updateCamera()
       cameraVelocity.y -= 1.0f;
    }
 
-   mCamera.setVelocity(cameraVelocity);
-   mCamera.update();
+   Camera& camera = mDirector.getCamera();
+   camera.setVelocity(cameraVelocity);
+   camera.update(mDirector.getTimeDelta());
 }
 
 void ICameraTest::run()
@@ -66,13 +59,14 @@ void ICameraTest::run()
 
 void ICameraTest::onTouchEvent(TouchEventType eventType, const Vector2f& position)
 {
+   Camera& camera = mDirector.getCamera();
    switch (eventType)
    {
    case TE_DOWN:
    case TE_UP:
       {
          mLastTouchPosition = position;
-         mCamera.setRotationDelta(Quatf(0.0f, 0.0f, 0.0f, 0.0f));
+         camera.setRotationDelta(Quatf(0.0f, 0.0f, 0.0f, 0.0f));
       }
       break;
    case TE_MOVE:
@@ -80,8 +74,8 @@ void ICameraTest::onTouchEvent(TouchEventType eventType, const Vector2f& positio
          Vector2f delta = position - mLastTouchPosition;
 
          Quatf rotationDeltaQ = Quatf::fromAxisRot(Vector3f(1.0f, 0.0f, 0.0f), delta.y) * Quatf::fromAxisRot(Vector3f(0.0f, 1.0f, 0.0f), delta.x);
-         mCamera.setRotationDelta(rotationDeltaQ);
-         mCamera.setYawPitch(-delta.x, -delta.y);
+         camera.setRotationDelta(rotationDeltaQ);
+         camera.setYawPitch(-delta.x, -delta.y);
 
          mLastTouchPosition = position;
       }

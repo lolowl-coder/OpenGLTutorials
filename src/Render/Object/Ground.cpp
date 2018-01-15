@@ -1,4 +1,4 @@
-#include "Render/Ground.h"
+#include "Render/Object/Ground.h"
 
 Vector3f Ground::genVertex(const int row, const int col)
 {
@@ -7,4 +7,5 @@ Vector3f Ground::genVertex(const int row, const int col)
    float y = 0.0f;
 
    return Vector3f(x, y, z);
+   //return Grid::genVertex(row, col);
 }

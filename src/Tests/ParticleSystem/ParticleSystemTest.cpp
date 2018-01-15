@@ -4,7 +4,6 @@
 ParticleSystemTest::ParticleSystemTest(Director& director, const std::string& name)
 : Test(director, name)
 , mEmitter(NULL)
-, mCamera(director)
 {
 }
 
@@ -24,11 +23,12 @@ void ParticleSystemTest::init()
    mParticleSystem.setEmitter(mEmitter);
    mParticleSystem.init();
 
-   mCamera.setPosition(Vector3f(0.0f, 0.0f, 1.0f));
-   mCamera.setLookAt(Vector3f(0.0f, 0.0f, -1.0f));
-   mCamera.setFOV(80.0f);
-   mCamera.setProjectionType(Camera::P_PERSPECTIVE);
-   mCamera.update();
+   Camera& camera = mDirector.getCamera();
+   camera.setPosition(Vector3f(0.0f, 0.0f, 1.0f));
+   camera.setLookAt(Vector3f(0.0f, 0.0f, -1.0f));
+   camera.setFOV(80.0f);
+   camera.setProjectionType(Camera::P_PERSPECTIVE);
+   camera.update(mDirector.getTimeDelta());
 
    for(int i = 0; i < CHARS_COUNT; i++)
    {
@@ -53,7 +53,8 @@ void ParticleSystemTest::run()
 {
    updateCamera();
 
-   mParticleSystem.render(mCamera.getV(), mCamera.getP());
+   Camera& camera = mDirector.getCamera();
+   mParticleSystem.render(camera.getV(), camera.getP());
 }
 
 void ParticleSystemTest::updateCamera()
@@ -83,19 +84,22 @@ void ParticleSystemTest::updateCamera()
    {
       cameraVelocity.y -= 1.0f;
    }
-   mCamera.setVelocity(cameraVelocity);
-   mCamera.update();
+
+   Camera& camera = mDirector.getCamera();
+   camera.setVelocity(cameraVelocity);
+   camera.update(mDirector.getTime());
 }
 
 void ParticleSystemTest::onTouchEvent(TouchEventType eventType, const Vector2f& position)
 {
+   Camera& camera = mDirector.getCamera();
    switch (eventType)
    {
    case TE_DOWN:
    case TE_UP:
       {
          mLastTouchPosition = position;
-         mCamera.setRotationDelta(Quatf(0.0f, 0.0f, 0.0f, 0.0f));
+         camera.setRotationDelta(Quatf(0.0f, 0.0f, 0.0f, 0.0f));
       }
       break;
    case TE_MOVE:
@@ -103,8 +107,8 @@ void ParticleSystemTest::onTouchEvent(TouchEventType eventType, const Vector2f& 
          Vector2f delta = position - mLastTouchPosition;
 
          Quatf rotationDeltaQ = Quatf::fromAxisRot(Vector3f(1.0f, 0.0f, 0.0f), delta.y) * Quatf::fromAxisRot(Vector3f(0.0f, 1.0f, 0.0f), delta.x);
-         mCamera.setRotationDelta(rotationDeltaQ);
-         mCamera.setYawPitch(-delta.x, -delta.y);
+         camera.setRotationDelta(rotationDeltaQ);
+         camera.setYawPitch(-delta.x, -delta.y);
 
          mLastTouchPosition = position;
       }

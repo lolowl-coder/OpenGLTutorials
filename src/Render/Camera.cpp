@@ -1,14 +1,13 @@
 #include "Render/Camera.h"
 
-Camera::Camera(Director& director)
-: mDirector(director)
-, mProjectionType(P_PERSPECTIVE)
+Camera::Camera()
+: mProjectionType(P_PERSPECTIVE)
 , mPosition(0.0f, 0.0f, 0.0f)
 , mLookAt(0.0f, 0.0f, -1.0f)
 , mUp(0.0f, 1.0f, 0.0f)
 , mFOV(45.0f)
 , mNear(1.0f)
-, mFar(100.0f)
+, mFar(1000.0f)
 , mYaw(0.0f)
 , mAbsPitch(0.0f)
 , mPitch(0.0f)
@@ -17,9 +16,9 @@ Camera::Camera(Director& director)
 
 }
 
-void Camera::update()
+void Camera::update(float timeDelta)
 {
-   updatePosition();
+   updatePosition(timeDelta);
 
    Vector3f cameraDirection = mLookAt - mPosition;
    cameraDirection.normalize();
@@ -73,7 +72,7 @@ void Camera::update()
 #endif
 }
 
-void Camera::updatePosition()
+void Camera::updatePosition(float timeDelta)
 {
    Vector3f forward = mLookAt - mPosition;
    forward.y = 0.0f;
@@ -82,7 +81,7 @@ void Camera::updatePosition()
    Vector3f side = forward.crossProduct(mUp);
    side.normalize();
 
-   Vector3f offset = (side * mVelocity.x + forward * mVelocity.z + mUp * mVelocity.y) * mDirector.getTimeDelta();
+   Vector3f offset = (side * mVelocity.x + forward * mVelocity.z + mUp * mVelocity.y) * timeDelta;
    
    mPosition += offset;
    mLookAt += offset;

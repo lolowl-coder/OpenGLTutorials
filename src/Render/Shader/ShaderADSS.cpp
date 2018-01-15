@@ -15,6 +15,7 @@ ShaderADSS::ShaderADSS()
 , mLightAttenuationLocation(-1)
 , mLightPositionLocation(-1)
 , mLightSpaceMatrixLocation(-1)
+, mLightDirLocation(-1)
 {
 }
 
@@ -95,4 +96,12 @@ void ShaderADSS::setEye(const Vector3f& eye)
       mEyeLocation = uniformLocation("uEye");
 
    uniform3(mEyeLocation, 1, &eye);
+}
+
+void ShaderADSS::setLightDir(const Vector3f& lightDir)
+{
+   if(mLightDirLocation == -1)
+      mLightDirLocation = uniformLocation("uLightDir");
+
+   uniform3(mLightDirLocation, 1, &lightDir);
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Director.h"
 #include "Render/Shader/Shader.h"
 
 #include "vmath.h"
@@ -15,10 +14,10 @@ public:
    };
 
 public:
-   Camera(Director& director);
+   Camera();
 
-   void update();
-   void updatePosition();
+   void update(float timeDelta);
+   void updatePosition(float timeDelta);
    void setProjectionType(EProjectionType projectionType);
    Vector3f getVelocity() const;
    void setVelocity(const Vector3f velocity);
@@ -33,7 +32,6 @@ public:
    Matrix4f getP() const;
 
 private:
-   const Director& mDirector;
    EProjectionType mProjectionType;
    Vector3f mVelocity;
    Vector3f mPosition;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Render/RectRenderer.h"
+#include "Render/Camera.h"
 
 #include "vmath.h"
 
@@ -23,9 +24,12 @@ public:
    std::string getAppName();
    void setAppName(const std::string& name);
    RectRenderer& getRectRenderer();
+   Camera& getCamera();
+   void setCamera(const Camera& camera);
 
 private:
    RectRenderer mRectRenderer;
+   Camera mCamera;
    unsigned int mFrame;
    Vector2f mViewSize;
    float mTimeDelta;

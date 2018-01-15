@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Tests/Test.h"
-#include "Render/Camera.h"
 #include "Render/Object/ParticleSystem.h"
 
 #define CHARS_COUNT 256
@@ -24,6 +23,5 @@ private:
    Emitter* mEmitter;
    ParticleSystem mParticleSystem;
    Vector2f mLastTouchPosition;
-   Camera mCamera;
    bool mKeyState[CHARS_COUNT];
 };

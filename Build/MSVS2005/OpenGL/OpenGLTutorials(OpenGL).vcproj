@@ -503,7 +503,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\FBO.h"
+					RelativePath="..\..\..\src\Render\FBO.h"
 					>
 				</File>
 				<File
@@ -554,7 +554,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\Render\ShaderADSS.h"
+						RelativePath="..\..\..\src\Render\Shader\ShaderADSS.h"
 						>
 					</File>
 					<File

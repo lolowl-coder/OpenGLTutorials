@@ -20,6 +20,7 @@ public:
    void setLight(const Light& light);
    void setLightSpaceMatrix(const Matrix4f& lightSpaceMatrix);
    void setEye(const Vector3f& eye);
+   void setLightDir(const Vector3f& lightDir);
 
 private:
    GLint mMLocation;
@@ -36,4 +37,5 @@ private:
    GLint mLightAttenuationLocation;
    GLint mLightPositionLocation;
    GLint mLightSpaceMatrixLocation;
+   GLint mLightDirLocation;
 };

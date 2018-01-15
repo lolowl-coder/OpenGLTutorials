@@ -19,9 +19,6 @@ public:
 private:
    void updateCamera();
 
-protected:
-   Camera mCamera;
-
 private:
    Vector2f mLastTouchPosition;
    bool mKeyState[CHARS_COUNT];

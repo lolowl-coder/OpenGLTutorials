@@ -6,6 +6,7 @@ Director::Director()
 , mTimeDelta(0.0f)
 , mTime(0.0f)
 , mAppName("OpenGL-application")
+, mCamera()
 {
 
 }
@@ -13,6 +14,13 @@ Director::Director()
 void Director::init()
 {
    mRectRenderer.init();
+
+   Vector3f cameraPosition(4.0f, 1.8f, 4.0f);
+   mCamera.setPosition(cameraPosition);
+   mCamera.setLookAt(cameraPosition - Vector3f(1.0f, 0.0f, 1.0f));
+   mCamera.setFOV(180.0f);
+   mCamera.setProjectionType(Camera::P_PERSPECTIVE);
+   mCamera.update(getTimeDelta());
 }
 
 void Director::deinit()
@@ -68,4 +76,14 @@ void Director::setAppName(const std::string& name)
 RectRenderer& Director::getRectRenderer()
 {
    return mRectRenderer;
+}
+
+Camera& Director::getCamera()
+{
+   return mCamera;
+}
+
+void Director::setCamera(const Camera& camera)
+{
+   mCamera = camera;
 }

@@ -68,8 +68,9 @@ void CameraTest::deinit()
 void CameraTest::renderWorldAxes()
 {
    mAxesShader.bind();
-   Matrix4f v = mCamera.getV();
-   Matrix4f p = mCamera.getP();
+   Camera& camera = mDirector.getCamera();
+   Matrix4f v = camera.getV();
+   Matrix4f p = camera.getP();
    mAxesShader.setMVP(p * v);
 
    glBindBuffer(GL_ARRAY_BUFFER, mWorldAxesVBO);
@@ -97,5 +98,6 @@ void CameraTest::run()
 
    renderWorldAxes();
 
-   mGrid.render(mCamera);
+   Camera& camera = mDirector.getCamera();
+   mGrid.render(camera);
 }
