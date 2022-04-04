@@ -21,13 +21,15 @@ GLuint FBO::attachTexture(bool depth, GLenum attachment, const Vector2i& size)
 
    GLint internalFormat = GL_RGBA;
    GLenum format = GL_RGBA;
+   GLenum type = GL_UNSIGNED_BYTE;
    if(depth)
    {
       internalFormat = GL_DEPTH_COMPONENT24;
       format = GL_DEPTH_COMPONENT;
+      type = GL_FLOAT;
    }
    
-   glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, size.x, size.y, 0, format, GL_UNSIGNED_BYTE, 0);
+   glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, size.x, size.y, 0, format, type, 0);
    checkGLError("FBO::attachTexture, can't create fbo texture");
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -58,7 +60,6 @@ bool FBO::init(const Vector2i& size, bool depth)
       drawBuffers.push_back(GL_DEPTH_ATTACHMENT);
       mDepthTexture = attachTexture(true, drawBuffers.back(), size);
    }
-
    
    glDrawBuffers(1, &drawBuffers[0]);
 

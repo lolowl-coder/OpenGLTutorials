@@ -1,7 +1,7 @@
 #include "Platform/Log.h"
 #include "Render/RenderContextBase.h"
 
-void checkGLError(const std::string& pre_msg)
+GLenum checkGLError(const std::string& pre_msg)
 {
    GLenum error_code = glGetError();
    if(error_code != GL_NO_ERROR)
@@ -25,6 +25,8 @@ void checkGLError(const std::string& pre_msg)
          break;
       }
    }
+
+   return error_code;
 }
 
 bool RenderContextBase::isExtensionSupported(const std::string& name)

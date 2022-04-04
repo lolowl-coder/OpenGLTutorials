@@ -77,13 +77,13 @@ void ShadowTest::renderDepth()
 
 void ShadowTest::setObjectUniforms(ShaderADSS& shader, const Object& object, const Camera& camera)
 {
-   mShaderADSSS.setM(object.getTranslation() * object.getRotation());
+   /*mShaderADSSS.setM(object.getTranslation() * object.getRotation());
    mShaderADSSS.setV(camera.getV());
    mShaderADSSS.setP(camera.getP());
    mShaderADSSS.setObjectMaterial(object.getMaterial());
    mShaderADSSS.setLight(object.getLight());
    mShaderADSSS.setEye(camera.getPosition());
-   mShaderADSSS.setLightDir(object.getTranslation().getTranslation() - object.getLight().mPosition);
+   mShaderADSSS.setLightDir(object.getTranslation().getTranslation() - object.getLight().mPosition);*/
 }
 
 void ShadowTest::renderScene(const Camera& camera)

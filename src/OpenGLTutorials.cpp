@@ -17,6 +17,9 @@
 #include "Tests/Instancing/InstancingTest.h"
 #include "Tests/ParticleSystem/ParticleSystemTest.h"
 #include "Tests/Shadow/ShadowTest.h"
+#include "Tests/FBO/FBOTest.h"
+#include "Tests/MSAA/MSAATest.h"
+#include "Tests/LineOptimization/LineOptimizationTest.h"
 
 #include <string>
 #include <fstream>
@@ -33,11 +36,14 @@ enum TestType
    TT_PARTICLE_SYSTEM,
    TT_IMAGE_PROCESSING,
    TT_SHADOW,
+   TT_FBO,
+   TT_MSAA,
+   TT_LINES_OPTIMIZATION,
    TT_COUNT
 };
 
 Test* currentTest = NULL;
-TestType currentTestType = TT_SHADOW;
+TestType currentTestType = TT_LINES_OPTIMIZATION;
 bool lButtonPressed = false;
 
 TestType tests[TT_COUNT];
@@ -95,7 +101,24 @@ void changeTest(TestType& testType)
          currentTest = new ShadowTest(director, "Shadow");
       }
       break;
+   case TT_FBO:
+      {
+         currentTest = new FBOTest(director, "FBO");
+      }
+      break;
+   case TT_MSAA:
+      {
+         currentTest = new MSAATest(director, "MSAA");
+      }
+      break;
+   case TT_LINES_OPTIMIZATION:
+   {
+      currentTest = new LineOptimizationTest(director, "Line optimization");
    }
+   break;
+   }
+
+   assert(currentTest != nullptr);
 
    if(currentTest)
    {

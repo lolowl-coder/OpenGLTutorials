@@ -1,4 +1,4 @@
-#include "Render/TexturedShader.h"
+#include "Render/Shader/TexturedShader.h"
 
 TexturedShader::TexturedShader()
 : mTextureUnitLocation(-1)

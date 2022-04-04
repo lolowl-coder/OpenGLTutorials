@@ -3,7 +3,7 @@
 #include "Render/GLHeaders.h"
 #include <string>
 
-void checkGLError ( const std::string& pre_msg );
+GLenum checkGLError ( const std::string& pre_msg );
 
 class RenderContextBase
 {
