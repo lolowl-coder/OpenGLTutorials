@@ -108,6 +108,11 @@ void LineOptimizationTest::deinit()
    checkGLError("Delete GL objects");
 }
 
+float clamp(float value, float mn, float mx)
+{
+   return max(min(value, mx), mn);
+}
+
 LineOptimizationTest::tPolyLine LineOptimizationTest::optimizePolyLine(const tPolyLine& polyLine, const float threshold)
 {
    tPolyLine result;
@@ -115,59 +120,93 @@ LineOptimizationTest::tPolyLine LineOptimizationTest::optimizePolyLine(const tPo
    auto linePointCount = polyLine.size();
    if(linePointCount > 1)
    {
+      //simple case
       if(linePointCount == 2u)
       {
-         result.push_back(polyLine[0]);
-         result.push_back(polyLine[1]);
+         const auto p0 = polyLine[0];
+         const auto p1 = polyLine[1];
+         if((p1 - p0).length() > 0.01)
+         {
+            result.push_back(p0);
+            result.push_back(p1);
+         }
       }
       else
       {
          float prevLength = 0.0f;
-         for(auto pointIndex = 0u; pointIndex < linePointCount - 1; ++pointIndex)
+         //if optimization is enabled
+         if(mThreshold > 0.0f)
          {
-            const auto p0 = polyLine[pointIndex];
-            if(pointIndex == 0u)
+            for(auto pointIndex = 0u; pointIndex < polyLine.size() - 1; ++pointIndex)
             {
-               result.push_back(p0);
-            }
-            else
-            {
-               const auto p1 = polyLine[pointIndex + 1];
-               auto v = p1 - p0;
-               auto l = v.length();
-
-               if(l > threshold)
+               const auto p0 = polyLine[pointIndex];
+               //add first vertex always
+               if(pointIndex == 0u)
                {
                   result.push_back(p0);
-                  prevLength = 0.0;
                }
                else
                {
-                  if(prevLength + l > threshold)
+                  const auto p1 = polyLine[pointIndex + 1];
+                  //if poly line contains 2 vertices - add last vertex always
+                  if(linePointCount == 2u)
                   {
-                     auto t = threshold - prevLength;
-                     auto vn = v;
-                     vn.normalize();
-                     auto newPoint = p0 + vn * t;
-                     //auto newPoint = (p0 + p1) * 0.5f;
-                     result.push_back(newPoint);
-                     prevLength = l - t;
+                     result.push_back(p1);
                   }
                   else
                   {
-                     prevLength += l;
+                     auto v = p1 - p0;
+                     auto l = v.length();
+
+                     if(l > 0.01)
+                     {
+                        //if segment is to large - add start vertex and reset length counter
+                        if(l > mThreshold)
+                        {
+                           result.push_back(p0);
+                           prevLength = 0.0;
+                        }
+                        else
+                        {
+                           //if accumulated length + segment lengt is large enough - add vertex
+                           //in position that corresponds to accumulated length
+                           if(prevLength + l > mThreshold)
+                           {
+                              auto t = clamp(mThreshold - prevLength, 0.0f, l);
+                              auto vn = v;
+                              vn.normalize();
+                              auto newPoint = p0 + vn * t;
+                              result.push_back(newPoint);
+                              //update accumulated length
+                              prevLength = l - t;
+                           }
+                           else
+                           {
+                              //accumulate length
+                              prevLength += l;
+                           }
+
+                           //clamp accumulated distance
+                           prevLength = clamp(prevLength, 0.0f, mThreshold);
+                        }
+
+                        //add last point always
+                        if(pointIndex == linePointCount - 2)
+                        {
+                           result.push_back(p1);
+                        }
+                     }
                   }
-
-                  /*if(prevLength > threshold)
-                  {
-                     prevLength = threshold;
-                  }*/
                }
-
-               if(pointIndex == linePointCount - 2)
-               {
-                  result.push_back(p1);
-               }
+            }
+         }
+         else
+         {
+            //no optimization - add all vertices
+            for(auto pointIndex = 0u; pointIndex < linePointCount; ++pointIndex)
+            {
+               const auto p = polyLine[pointIndex];
+               result.push_back(p);
             }
          }
       }
