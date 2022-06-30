@@ -21,14 +21,7 @@ LineOptimizationTest::tPolyLine LineOptimizationTest::createRandomPolyLine()
          int count = 50;
          for(int i = 0; i < count; i++)
          {
-            /*if(i == 25)
-            {
-               result.push_back(Vector2f(i / float(count) * 0.8f + 0.1f, 1.0f));
-            }
-            else*/
-            {
-               result.push_back(Vector2f(i / float(count) * 0.8f + 0.1f, sin(i / 5.0f) * 0.5f + 0.5f));
-            }
+            result.push_back(Vector2f(i / float(count) * 0.8f + 0.1f, sin(i / 5.0f) * 0.5f + 0.5f));
          }
       }
       break;
