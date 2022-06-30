@@ -15,6 +15,13 @@ enum EShapeType
    SHAPE_COUNT
 };
 
+enum EOptimizationKind
+{
+   OPT_DISTANCE,
+   OPT_ANGLE,
+   OPT_COUNT
+};
+
 class LineOptimizationTest : public Test
 {
 public:
@@ -30,7 +37,9 @@ private:
    void updateLines();
    tPolyLine createRandomPolyLine();
    void createPolyLineVBO(GLuint& polyLineVBO, const tPolyLine& polyLine);
-   tPolyLine optimizePolyLine(const tPolyLine& polyLine, float threshold);
+   tPolyLine optimizePolyLine(const tPolyLine& polyLine);
+   void optimizeByDistance(const tPolyLine& polyLine, tPolyLine& result, const float distanceThreshold);
+   void optimizeByAngle(const tPolyLine& polyLine, tPolyLine& result, const float angleThreshold);
    void renderPolyLine(const GLuint polyLineVBO, const Vector4f& color, int count, float pointSize);
 
 private:
@@ -39,6 +48,8 @@ private:
    tPolyLine mPolyLine;
    tPolyLine mPolyLineOptimized;
    PolyLineShader mPolyLineShader;
-   float mThreshold = 0.2f;
+   int mOptimizationKind = OPT_DISTANCE;
+   float mDistanceThreshold = 0.2f;
+   float mAngleThreshold = 0.8f;
    int mShape = SHAPE0;
 };

@@ -21,14 +21,7 @@ LineOptimizationTest::tPolyLine LineOptimizationTest::createRandomPolyLine()
          int count = 50;
          for(int i = 0; i < count; i++)
          {
-            /*if(i == 25)
-            {
-               result.push_back(Vector2f(i / float(count) * 0.8f + 0.1f, 1.0f));
-            }
-            else*/
-            {
-               result.push_back(Vector2f(i / float(count) * 0.8f + 0.1f, sin(i / 5.0f) * 0.5f + 0.5f));
-            }
+            result.push_back(Vector2f(i / float(count) * 0.8f + 0.1f, sin(i / 5.0f) * 0.5f + 0.5f));
          }
       }
       break;
@@ -79,7 +72,7 @@ void LineOptimizationTest::updateLines()
 {
    //poly lines
    mPolyLine = createRandomPolyLine();
-   mPolyLineOptimized = optimizePolyLine(mPolyLine, mThreshold);
+   mPolyLineOptimized = optimizePolyLine(mPolyLine);
 
    //vbo
    createPolyLineVBO(mPolyLineVBO, mPolyLine);
@@ -113,94 +106,140 @@ float clamp(float value, float mn, float mx)
    return max(min(value, mx), mn);
 }
 
-LineOptimizationTest::tPolyLine LineOptimizationTest::optimizePolyLine(const tPolyLine& polyLine, const float threshold)
+void LineOptimizationTest::optimizeByDistance(const tPolyLine& polyLine, LineOptimizationTest::tPolyLine& result, const float distanceThreshold)
 {
-   tPolyLine result;
-
    auto linePointCount = polyLine.size();
-   if(linePointCount > 1)
+   //simple case
+   if(linePointCount == 2u)
    {
-      //simple case
-      if(linePointCount == 2u)
+      const auto p0 = polyLine[0];
+      const auto p1 = polyLine[1];
+      if((p1 - p0).length() > 0.01)
       {
-         const auto p0 = polyLine[0];
-         const auto p1 = polyLine[1];
-         if((p1 - p0).length() > 0.01)
-         {
-            result.push_back(p0);
-            result.push_back(p1);
-         }
+         result.push_back(p0);
+         result.push_back(p1);
       }
-      else
+   }
+   else
+   {
+      float prevLength = 0.0f;
+      //if optimization is enabled
+      if(distanceThreshold > 0.0f)
       {
-         float prevLength = 0.0f;
-         //if optimization is enabled
-         if(mThreshold > 0.0f)
+         for(auto pointIndex = 0u; pointIndex < linePointCount - 1; ++pointIndex)
          {
-            for(auto pointIndex = 0u; pointIndex < polyLine.size() - 1; ++pointIndex)
+            const auto p0 = polyLine[pointIndex];
+            //add first vertex always
+            if(pointIndex == 0u)
             {
-               const auto p0 = polyLine[pointIndex];
-               //add first vertex always
-               if(pointIndex == 0u)
+               result.push_back(p0);
+            }
+            else
+            {
+               const auto p1 = polyLine[pointIndex + 1];
+               //if poly line contains 2 vertices - add last vertex always
+               if(linePointCount == 2u)
                {
-                  result.push_back(p0);
+                  result.push_back(p1);
                }
                else
                {
-                  const auto p1 = polyLine[pointIndex + 1];
-                  //if poly line contains 2 vertices - add last vertex always
-                  if(linePointCount == 2u)
-                  {
-                     result.push_back(p1);
-                  }
-                  else
-                  {
-                     auto v = p1 - p0;
-                     auto l = v.length();
+                  auto v = p1 - p0;
+                  auto l = v.length();
 
-                     if(l > 0.01)
+                  if(l > 0.01)
+                  {
+                     //if segment is to large - add start vertex and reset length counter
+                     if(l > distanceThreshold)
                      {
-                        //if segment is to large - add start vertex and reset length counter
-                        if(l > mThreshold)
+                        result.push_back(p0);
+                        prevLength = 0.0;
+                     }
+                     else
+                     {
+                        //if accumulated length + segment lengt is large enough - add vertex
+                        //in position that corresponds to accumulated length
+                        if(prevLength + l > distanceThreshold)
                         {
-                           result.push_back(p0);
-                           prevLength = 0.0;
+                           auto t = clamp(distanceThreshold - prevLength, 0.0f, l);
+                           auto vn = v;
+                           vn.normalize();
+                           auto newPoint = p0 + vn * t;
+                           result.push_back(newPoint);
+                           //update accumulated length
+                           prevLength = l - t;
                         }
                         else
                         {
-                           //if accumulated length + segment lengt is large enough - add vertex
-                           //in position that corresponds to accumulated length
-                           if(prevLength + l > mThreshold)
-                           {
-                              auto t = clamp(mThreshold - prevLength, 0.0f, l);
-                              auto vn = v;
-                              vn.normalize();
-                              auto newPoint = p0 + vn * t;
-                              result.push_back(newPoint);
-                              //update accumulated length
-                              prevLength = l - t;
-                           }
-                           else
-                           {
-                              //accumulate length
-                              prevLength += l;
-                           }
-
-                           //clamp accumulated distance
-                           prevLength = clamp(prevLength, 0.0f, mThreshold);
+                           //accumulate length
+                           prevLength += l;
                         }
 
-                        //add last point always
-                        if(pointIndex == linePointCount - 2)
-                        {
-                           result.push_back(p1);
-                        }
+                        //clamp accumulated distance
+                        prevLength = clamp(prevLength, 0.0f, distanceThreshold);
+                     }
+
+                     //add last point always
+                     if(pointIndex == linePointCount - 2)
+                     {
+                        result.push_back(p1);
                      }
                   }
                }
             }
          }
-         else
+      }
+   }
+}
+
+void LineOptimizationTest::optimizeByAngle(const tPolyLine& polyLine, tPolyLine& result, const float angleThreshold)
+{
+   result.push_back(polyLine[0]);
+   const auto linePointCount = polyLine.size();
+   float accumulatedDot = 0.0f;
+   for(auto i = 0u; i < linePointCount - 2; i++)
+   {
+      const auto p0 = polyLine[i];
+      const auto p1 = polyLine[i + 1];
+      const auto p2 = polyLine[i + 2];
+      auto v0 = p1 - p0;
+      v0.normalize();
+      const Vector2f perp(v0.y, -v0.x);
+      auto v1 = p2 - p1;
+      v1.normalize();
+      const float dotProduct = v0.dotProduct(v1);
+      if(/*abs(dotProduct) < angleThreshold || */abs(accumulatedDot) > angleThreshold)
+      {
+         result.push_back(p1);
+         accumulatedDot = 0.0f;
+      }
+      else
+      {
+         accumulatedDot += perp.dotProduct(v1);
+      }
+   }
+   result.push_back(polyLine[linePointCount - 1]);
+}
+
+LineOptimizationTest::tPolyLine LineOptimizationTest::optimizePolyLine(const tPolyLine& polyLine)
+{
+   tPolyLine result;
+
+   auto linePointCount = polyLine.size();
+   {
+      switch(mOptimizationKind)
+      {
+         case OPT_DISTANCE:
+         {
+            optimizeByDistance(polyLine, result, mDistanceThreshold);
+         }
+         break;
+         case OPT_ANGLE:
+         {
+            optimizeByAngle(polyLine, result, mAngleThreshold);
+         }
+         break;
+         default:
          {
             //no optimization - add all vertices
             for(auto pointIndex = 0u; pointIndex < linePointCount; ++pointIndex)
@@ -209,6 +248,7 @@ LineOptimizationTest::tPolyLine LineOptimizationTest::optimizePolyLine(const tPo
                result.push_back(p);
             }
          }
+         break;
       }
    }
 
@@ -250,21 +290,59 @@ void LineOptimizationTest::onKeyboardEvent(KeyboardEventType eventType, int keyC
    {
       switch(keyCode)
       {
-      case VK_LEFT:
-         mThreshold -= 0.01f;
-         updateLines();
+         case 'K':
+         {
+            mOptimizationKind = (mOptimizationKind + 1) % OPT_COUNT;
+            updateLines();
+         }
          break;
-      case VK_RIGHT:
-         mThreshold += 0.01f;
-         updateLines();
+         case VK_LEFT:
+         {
+            switch(mOptimizationKind)
+            {
+               case OPT_DISTANCE:
+               {
+                  mDistanceThreshold -= 0.01f;
+               }
+               break;
+               case OPT_ANGLE:
+               {
+                  mAngleThreshold -= 0.001f;
+               }
+               break;
+            }
+            updateLines();
+         }
          break;
-      case 'S':
-         mShape = (mShape + 1) % SHAPE_COUNT;
-         updateLines();
+         case VK_RIGHT:
+         {
+            switch(mOptimizationKind)
+            {
+               case OPT_DISTANCE:
+               {
+                  mDistanceThreshold += 0.01f;
+               }
+               break;
+               case OPT_ANGLE:
+               {
+                  mAngleThreshold += 0.001f;
+               }
+               break;
+            }
+            updateLines();
+         }
          break;
-      case 's':
-         mShape = (mShape - 1) % SHAPE_COUNT;
-         updateLines();
+         case 'S':
+         {
+            mShape = (mShape + 1) % SHAPE_COUNT;
+            updateLines();
+         }
+         break;
+         case 's':
+         {
+            mShape = (mShape - 1) % SHAPE_COUNT;
+            updateLines();
+         }
          break;
       }
    }
