@@ -40,3 +40,6 @@
 *.ncb
 *BuildLog.htm
 *Lib/glew*
+*.vs
+*Debug/
+*UpgradeLog.htm

@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Tests">
+      <UniqueIdentifier>{dba43a4e-93dc-41b9-a439-380cc7d6de85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests\Instancing">
+      <UniqueIdentifier>{685c7255-9ac0-4e09-911b-dc03f2f4b6df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests\ComputeShader">
+      <UniqueIdentifier>{80e91010-f303-4e94-a67e-1d3e7b4e9840}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests\BlendingMode">
+      <UniqueIdentifier>{c3e822fc-f79c-4dc5-9137-e5cc9014383a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests\Camera">
+      <UniqueIdentifier>{33882618-fcbc-4dde-917a-53584fcd4da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests\ParticleSystem">
+      <UniqueIdentifier>{ad686e94-d401-4893-b8fd-7ad5d95e62ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests\Glow">
+      <UniqueIdentifier>{d61eff72-57c1-4fbc-9be3-64b42ea7f050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests\Shadow">
+      <UniqueIdentifier>{a4335855-204e-4ea5-9f21-df6d3f80b55a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests\FBO">
+      <UniqueIdentifier>{3ccab909-0550-49d4-b5ed-ad48456fa322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Render">
+      <UniqueIdentifier>{9eda756b-dce7-4b9d-99f6-46827cec8ab2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Render\Shader">
+      <UniqueIdentifier>{a4659959-6715-4dcd-ad07-849398550c28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Render\Object">
+      <UniqueIdentifier>{f334857f-07cd-4e02-b860-1f4f91dd8555}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Tests">
+      <UniqueIdentifier>{5659ecdb-295b-4d6f-a027-9465572bb762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tests\Instancing">
+      <UniqueIdentifier>{210764f4-bf66-4233-8471-a995836187f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tests\ComputeShader">
+      <UniqueIdentifier>{75028425-f03d-4563-899d-d5e5a8601afc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tests\BlendingMode">
+      <UniqueIdentifier>{1b545886-1382-426a-84ab-01f6c083f136}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tests\Camera">
+      <UniqueIdentifier>{c60607b5-2240-44e1-907e-298cc3bc26aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tests\ParticleSystem">
+      <UniqueIdentifier>{3cbe580b-aee5-418f-86e2-baabc6aaf967}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tests\Glow">
+      <UniqueIdentifier>{ff671435-dade-4c11-83ad-59b5dd47fada}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tests\Shadow">
+      <UniqueIdentifier>{f4464343-0989-460f-913d-35c05fc62c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tests\FBO">
+      <UniqueIdentifier>{281361c8-c046-49a8-800c-1bcbb91027f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tests\MSAA">
+      <UniqueIdentifier>{a58cf859-1632-4538-8c9b-a6e0097d7543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Render">
+      <UniqueIdentifier>{96f043e3-5243-4a04-872c-7d3017500062}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Render\Shader">
+      <UniqueIdentifier>{8d4f6454-1104-4c71-badd-eba568ff5947}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Render\Object">
+      <UniqueIdentifier>{4bb98806-f0d9-4759-93ef-9da33f892158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Tests\MSAA">
+      <UniqueIdentifier>{0a963ad7-f16e-4346-a493-c2e67510cba9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests\LineOptimization">
+      <UniqueIdentifier>{14fba500-69aa-4da0-a645-3e18d49293e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tests\LineOptimization">
+      <UniqueIdentifier>{88c99a24-8be9-4959-8693-0e41516008d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tests\Capsule">
+      <UniqueIdentifier>{b3a4c874-ea67-4c9c-a979-ce91d4235bed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests\Capsule">
+      <UniqueIdentifier>{a0291f77-7c47-4573-b5e7-accca01b869d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\Director.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\Helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Platform\Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\MathUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenGLTutorials.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\vmath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\Test.cpp">
+      <Filter>Source Files\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\Instancing\InstancingTest.cpp">
+      <Filter>Source Files\Tests\Instancing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\ComputeShader\ComputeShaderTest.cpp">
+      <Filter>Source Files\Tests\ComputeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\ComputeShader\ImageProcessingTest.cpp">
+      <Filter>Source Files\Tests\ComputeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\BlendEquation\BlendEquationTest.cpp">
+      <Filter>Source Files\Tests\BlendingMode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\Camera\AxesShader.cpp">
+      <Filter>Source Files\Tests\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\Camera\CameraTest.cpp">
+      <Filter>Source Files\Tests\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\Camera\ICameraTest.cpp">
+      <Filter>Source Files\Tests\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\ParticleSystem\ParticleSystemTest.cpp">
+      <Filter>Source Files\Tests\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\Glow\GlowTest.cpp">
+      <Filter>Source Files\Tests\Glow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\Shadow\ShadowTest.cpp">
+      <Filter>Source Files\Tests\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\FBO\FBOTest.cpp">
+      <Filter>Source Files\Tests\FBO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Attribute.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Buffer.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Camera.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\FBO.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Light.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Material.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\RectRenderer.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\RenderContextBase.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\ShaderStorageBuffer.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Texture.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Win32GLES30RenderContext.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Shader\RectShader.cpp">
+      <Filter>Source Files\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Shader\Shader.cpp">
+      <Filter>Source Files\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Shader\ShaderADSS.cpp">
+      <Filter>Source Files\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Shader\TexturedRectShader.cpp">
+      <Filter>Source Files\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Shader\TexturedShader.cpp">
+      <Filter>Source Files\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Object\Cube.cpp">
+      <Filter>Source Files\Render\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Object\Grid.cpp">
+      <Filter>Source Files\Render\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Object\Ground.cpp">
+      <Filter>Source Files\Render\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Object\Object.cpp">
+      <Filter>Source Files\Render\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Render\Object\ParticleSystem.cpp">
+      <Filter>Source Files\Render\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\MSAA\MSAATest.cpp">
+      <Filter>Source Files\Tests\MSAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\LineOptimization\LineOptimizationTest.cpp">
+      <Filter>Source Files\Tests\LineOptimization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\LineOptimization\PolyLineShader.cpp">
+      <Filter>Source Files\Tests\LineOptimization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\Capsule\CapsuleTest.cpp">
+      <Filter>Source Files\Tests\Capsule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Tests\Capsule\CapsuleShader.cpp">
+      <Filter>Source Files\Render\Shader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\Director.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\Helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Platform\Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\MathUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\Test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\vmath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Win32GLES30RenderContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\Instancing\InstancingTest.h">
+      <Filter>Header Files\Tests\Instancing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\ComputeShader\ComputeShaderTest.h">
+      <Filter>Header Files\Tests\ComputeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\ComputeShader\ImageProcessingTest.h">
+      <Filter>Header Files\Tests\ComputeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\BlendEquation\BlendEquationTest.h">
+      <Filter>Header Files\Tests\BlendingMode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\Camera\AxesShader.h">
+      <Filter>Header Files\Tests\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\Camera\CameraTest.h">
+      <Filter>Header Files\Tests\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\Camera\ICameraTest.h">
+      <Filter>Header Files\Tests\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\ParticleSystem\ParticleSystemTest.h">
+      <Filter>Header Files\Tests\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\Glow\GlowTest.h">
+      <Filter>Header Files\Tests\Glow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\Shadow\ShadowTest.h">
+      <Filter>Header Files\Tests\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\FBO\FBOTest.h">
+      <Filter>Header Files\Tests\FBO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Attribute.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Buffer.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Camera.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\FBO.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\GLHeaders.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Light.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Material.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\RectRenderer.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\RenderContext.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\RenderContextBase.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\ShaderStorageBuffer.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Texture.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Shader\RectShader.h">
+      <Filter>Header Files\Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Shader\Shader.h">
+      <Filter>Header Files\Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Shader\ShaderADSS.h">
+      <Filter>Header Files\Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Shader\TexturedRectShader.h">
+      <Filter>Header Files\Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Shader\TexturedShader.h">
+      <Filter>Header Files\Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Object\Cube.h">
+      <Filter>Header Files\Render\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Object\Grid.h">
+      <Filter>Header Files\Render\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Object\Ground.h">
+      <Filter>Header Files\Render\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Object\Object.h">
+      <Filter>Header Files\Render\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Object\ParticleSystem.h">
+      <Filter>Header Files\Render\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\MSAA\MSAATest.h">
+      <Filter>Header Files\Tests\MSAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\LineOptimization\LineOptimizationTest.h">
+      <Filter>Header Files\Tests\LineOptimization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\LineOptimization\PolyLineShader.h">
+      <Filter>Header Files\Tests\LineOptimization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\Capsule\CapsuleShader.h">
+      <Filter>Header Files\Tests\Capsule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Tests\Capsule\CapsuleTest.h">
+      <Filter>Header Files\Tests\Capsule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Render\Shader\CapsuleShader.h">
+      <Filter>Header Files\Render\Shader</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

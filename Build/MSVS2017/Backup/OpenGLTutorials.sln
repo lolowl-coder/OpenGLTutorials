@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLTutorials(DesktopGL)", "OpenGL\OpenGLTutorials(OpenGL).vcproj", "{8F59FBD2-5511-4655-A85F-6040E4F50959}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLTutorials(GLES30)", "OpenGL ES\OpenGLTutorials(OpenGL ES).vcproj", "{8DE62F35-51A1-4A49-AEF4-52FE72AE41BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		GLES30_Debug|Win32 = GLES30_Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F59FBD2-5511-4655-A85F-6040E4F50959}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8F59FBD2-5511-4655-A85F-6040E4F50959}.Debug|Win32.Build.0 = Debug|Win32
+		{8F59FBD2-5511-4655-A85F-6040E4F50959}.GLES30_Debug|Win32.ActiveCfg = GLES30_Debug|Win32
+		{8F59FBD2-5511-4655-A85F-6040E4F50959}.GLES30_Debug|Win32.Build.0 = GLES30_Debug|Win32
+		{8F59FBD2-5511-4655-A85F-6040E4F50959}.Release|Win32.ActiveCfg = Release|Win32
+		{8F59FBD2-5511-4655-A85F-6040E4F50959}.Release|Win32.Build.0 = Release|Win32
+		{8DE62F35-51A1-4A49-AEF4-52FE72AE41BF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8DE62F35-51A1-4A49-AEF4-52FE72AE41BF}.Debug|Win32.Build.0 = Debug|Win32
+		{8DE62F35-51A1-4A49-AEF4-52FE72AE41BF}.GLES30_Debug|Win32.ActiveCfg = Debug|Win32
+		{8DE62F35-51A1-4A49-AEF4-52FE72AE41BF}.GLES30_Debug|Win32.Build.0 = Debug|Win32
+		{8DE62F35-51A1-4A49-AEF4-52FE72AE41BF}.Release|Win32.ActiveCfg = Release|Win32
+		{8DE62F35-51A1-4A49-AEF4-52FE72AE41BF}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
