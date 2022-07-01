@@ -20,6 +20,7 @@
 #include "Tests/FBO/FBOTest.h"
 #include "Tests/MSAA/MSAATest.h"
 #include "Tests/LineOptimization/LineOptimizationTest.h"
+#include "Tests/Capsule/CapsuleTest.h"
 
 #include <string>
 #include <fstream>
@@ -39,11 +40,12 @@ enum TestType
    TT_FBO,
    TT_MSAA,
    TT_LINES_OPTIMIZATION,
+   TT_CAPSULE,
    TT_COUNT
 };
 
 Test* currentTest = NULL;
-TestType currentTestType = TT_LINES_OPTIMIZATION;
+TestType currentTestType = TT_CAPSULE;
 bool lButtonPressed = false;
 
 TestType tests[TT_COUNT];
@@ -112,10 +114,15 @@ void changeTest(TestType& testType)
       }
       break;
    case TT_LINES_OPTIMIZATION:
-   {
-      currentTest = new LineOptimizationTest(director, "Line optimization");
-   }
-   break;
+      {
+         currentTest = new LineOptimizationTest(director, "Line optimization");
+      }
+      break;
+   case TT_CAPSULE:
+      {
+         currentTest = new CapsuleTest(director, "Capsule");
+      }
+      break;
    }
 
    assert(currentTest != nullptr);

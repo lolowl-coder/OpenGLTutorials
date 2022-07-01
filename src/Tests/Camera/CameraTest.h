@@ -12,10 +12,11 @@ public:
    virtual void deinit();
    virtual void run();
 
+protected:
+   void renderWorldAxes();
+
 private:
    void initWorldAxes();
-   void renderWorldAxes();
-   void bindGridShader();
 
 private:
    GLuint mWorldAxesVBO;
