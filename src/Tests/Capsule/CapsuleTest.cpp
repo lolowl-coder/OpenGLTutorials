@@ -295,8 +295,10 @@ void CapsuleTest::renderCapsule()
    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), 0);
    mCapsuleIndexBuffer.bind();
 
+   glEnable(GL_DEPTH_TEST);
    glDrawElements(GL_TRIANGLES, mIndicesCount, GL_UNSIGNED_SHORT, nullptr);
    mCapsuleShader.setUniforms(Vector4f(0.0f, 1.0f, 0.0f, 1.0f), p * v);
+   glDisable(GL_DEPTH_TEST);
    glDrawArrays(GL_POINTS, 0, mVerticesCount);
 }
 
