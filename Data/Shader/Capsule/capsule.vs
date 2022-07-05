@@ -8,6 +8,10 @@ uniform mat4 uMVP;
 
 void main ( void )
 {
-   gl_Position = uMVP * vec4(aPosition, 1.0);
-   gl_PointSize = 3.0;
+   vec3 pos = aPosition;
+   pos.z -= 1.5;
+   float offset = sign(pos.z) * 2.0;
+   pos.z += offset;
+   gl_Position = uMVP * vec4(pos, 1.0);
+   gl_PointSize = .0;
 }
